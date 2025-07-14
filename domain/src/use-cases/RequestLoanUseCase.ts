@@ -5,17 +5,24 @@ import { Loan } from "../entities/Loan";
 interface RequestLoanInput {
   userId: string;
   bookId: string;
-  durationInMonths: 1 | 2
+  durationInMonths: 1 | 2;
 }
 
 export class RequestLoanUseCase {
+
   constructor(
     private readonly bookRepo: BookRepository,
     private readonly loanRepo: LoanRepository
   ) {}
 
   async execute(input: RequestLoanInput): Promise<void> {
+
+    const existingLoan = await this.loanRepo.findById(input.bookId + ":" + input.userId);
     const book = await this.bookRepo.findById(input.bookId);
+
+    if (existingLoan && !existingLoan.returned) {
+      throw new Error("El libro ya se te fue prestado");
+    }
 
     if (!book) {
       throw new Error("Libro no encontrado");
