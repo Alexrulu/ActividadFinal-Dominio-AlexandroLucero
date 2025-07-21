@@ -5,7 +5,7 @@ import { Loan } from "../entities/Loan";
 interface RequestLoanInput {
   userId: string;
   bookId: string;
-  durationInMonths: 1 | 2;
+  durationInMonths: number;
 }
 
 export class RequestLoanUseCase {
@@ -16,6 +16,10 @@ export class RequestLoanUseCase {
   ) {}
 
   async execute(input: RequestLoanInput): Promise<void> {
+
+    if (input.durationInMonths !== 1 && input.durationInMonths !== 2) {
+      throw new Error("La duración máxima para el préstamo es de 2 meses");
+    }
 
     const existingLoan = await this.loanRepo.findById(input.bookId + ":" + input.userId);
     const book = await this.bookRepo.findById(input.bookId);

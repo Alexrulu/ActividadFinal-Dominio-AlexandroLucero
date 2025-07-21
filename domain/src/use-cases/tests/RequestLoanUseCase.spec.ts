@@ -173,6 +173,19 @@ describe("RequestLoanUseCase", () => {
     ).rejects.toThrow("El libro ya se te fue prestado");
   });
 
+  it("debería lanzar un error si el libro se solicita por más de 2 meses o un número no permitido", async () => {
+    const book = new Book("libro-1", "El principito", "Antoine de Saint-Exupéry", 5, 0);
+    (mockBookRepo.findById as any).mockResolvedValue(book);
+    const useCase = new RequestLoanUseCase(mockBookRepo, mockLoanRepo);
+    await expect(
+      useCase.execute({
+        userId: "usuario-1",
+        bookId: "libro-1",
+        durationInMonths: 3,
+      })
+    ).rejects.toThrow("La duración máxima para el préstamo es de 2 meses");
+  });
+
 });
 
   
