@@ -7,7 +7,7 @@ export class ReturnLoanUseCase {
     const book = await this.bookRepo.findById(bookId);
     if (!book) throw new Error("Libro no encontrado.");
 
-    book.return(); // usa el método de entidad
+    book.return();
 
     await this.bookRepo.save(book);
   }

@@ -16,7 +16,7 @@ class InMemoryUserRepository {
 
 describe('RegisterUserUseCase', () => {
 
-  // Tests Exitosos ✅
+  // Correcto funcionamiento ✅
 
   it('debería registrar el usuario si el email no está en uso', async () => {
     const repository = new InMemoryUserRepository()
@@ -82,7 +82,7 @@ describe('RegisterUserUseCase', () => {
     expect(user.role).toBe('user')
   })
 
-  // Tests Fallidos ❌
+  // Errores esperados ❌
 
   it('lanza un error si el email ya está en uso', async () => {
     const repository = new InMemoryUserRepository()
