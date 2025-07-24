@@ -62,7 +62,7 @@ describe('RegisterUserUseCase', () => {
     expect(user).toBeInstanceOf(User)
     expect(user.name).toBe('Test User')
     expect(user.email).toBe('btm6x@example.com')
-    expect(user.password).toBe('password123')
+    expect(user.passwordHash).toBe('password123')
     expect(user.id).toBeDefined()
   })
 
@@ -77,7 +77,7 @@ describe('RegisterUserUseCase', () => {
     expect(user).toBeInstanceOf(User)
     expect(user.name).toBe('Default Role User')
     expect(user.email).toBe('fbmln@example.com')
-    expect(user.password).toBe('password123')
+    expect(user.passwordHash).toBe('password123')
     expect(user.id).toBeDefined()
     expect(user.role).toBe('user')
   })
