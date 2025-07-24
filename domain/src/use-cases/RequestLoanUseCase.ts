@@ -2,11 +2,11 @@ import { BookRepository } from "../repositories/BookRepository";
 import { LoanRepository } from "../repositories/LoanRepository";
 import { Loan } from "../entities/Loan";
 
-interface RequestLoanInput {
+type RequestLoanInput = {
   userId: string;
   bookId: string;
   durationInMonths: number;
-}
+};
 
 export class RequestLoanUseCase {
 
@@ -21,7 +21,7 @@ export class RequestLoanUseCase {
       throw new Error("La duración máxima para el préstamo es de 2 meses");
     }
 
-    const existingLoan = await this.loanRepo.findById(input.bookId + ":" + input.userId);
+    const existingLoan = await this.loanRepo.findActiveByUserAndBook(input.userId, input.bookId);
     const book = await this.bookRepo.findById(input.bookId);
 
     if (existingLoan && !existingLoan.returned) {
@@ -35,8 +35,6 @@ export class RequestLoanUseCase {
     if (!book.hasAvailableCopies()) {
       throw new Error("No hay copias disponibles para prestar");
     }
-
-    book.borrow();
 
     const now = new Date();
     const returnDate = new Date(
@@ -55,6 +53,5 @@ export class RequestLoanUseCase {
     );
 
     await this.loanRepo.create(loan);
-    await this.bookRepo.save(book);
   }
 }
