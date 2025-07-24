@@ -12,6 +12,7 @@ describe("ReturnLoanUseCase", () => {
     const mockRepo: BookRepository = {
       findById: vi.fn().mockResolvedValue(book),
       save: vi.fn().mockResolvedValue(undefined),
+      findAll: vi.fn().mockResolvedValue([]),
     };
     const useCase = new ReturnLoanUseCase(mockRepo);
     await useCase.execute("1");
@@ -27,6 +28,7 @@ describe("ReturnLoanUseCase", () => {
     const mockRepo: BookRepository = {
       findById: vi.fn(async (id: string) => books.find(b => b.id === id) ?? null),
       save: vi.fn().mockResolvedValue(undefined),
+      findAll: vi.fn().mockResolvedValue(books),
     };
     const useCase = new ReturnLoanUseCase(mockRepo);
     await useCase.execute("1");
@@ -40,13 +42,13 @@ describe("ReturnLoanUseCase", () => {
     expect(mockRepo.save).toHaveBeenCalledTimes(4);
   });
 
-
   // Errores esperados ❌
 
   it("debería lanzar error si el libro no existe", async () => {
     const mockRepo: BookRepository = {
       findById: vi.fn().mockResolvedValue(null),
       save: vi.fn(),
+      findAll: vi.fn().mockResolvedValue([]),
     };
     const useCase = new ReturnLoanUseCase(mockRepo);
     await expect(useCase.execute("inexistente")).rejects.toThrow("Libro no encontrado.");
@@ -57,6 +59,7 @@ describe("ReturnLoanUseCase", () => {
     const mockRepo: BookRepository = {
       findById: vi.fn().mockResolvedValue(book),
       save: vi.fn(),
+      findAll: vi.fn().mockResolvedValue([]),
     };
     const useCase = new ReturnLoanUseCase(mockRepo);
     await expect(useCase.execute("1")).rejects.toThrow("No hay copias para devolver.");
