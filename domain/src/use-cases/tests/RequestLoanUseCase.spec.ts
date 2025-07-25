@@ -18,6 +18,8 @@ describe("RequestLoanUseCase", () => {
     findById: vi.fn().mockResolvedValue(null),
     create: vi.fn(),
     save: vi.fn(),
+    findAll: vi.fn(),
+    findByUserId: vi.fn(),
   };
   beforeEach(() => {
     mockBookRepo = {
@@ -30,6 +32,8 @@ describe("RequestLoanUseCase", () => {
       findById: vi.fn().mockResolvedValue(null),
       create: vi.fn(),
       save: vi.fn(),
+      findAll: vi.fn(),
+      findByUserId: vi.fn(),
     };
   });
 
