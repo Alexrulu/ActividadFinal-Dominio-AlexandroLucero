@@ -1,9 +1,23 @@
-export class User {
-  constructor(
-    public readonly id: string,
-    public name: string,
-    public email: string,
-    public passwordHash: string,
-    public role: 'admin' | 'user' = 'user',
-  ) {}
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  passwordHash: string;
+  role: 'admin' | 'user';
+}
+
+export function createUser(
+  id: string,
+  name: string,
+  email: string,
+  passwordHash: string,
+  role: 'admin' | 'user' = 'user'
+): User {
+  return {
+    id,
+    name,
+    email,
+    passwordHash,
+    role,
+  };
 }

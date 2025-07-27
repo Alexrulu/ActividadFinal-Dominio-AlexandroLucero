@@ -1,14 +1,17 @@
 import { BookRepository } from "../repositories/BookRepository";
+import { returnBook } from "../entities/Book";
 
-export class ReturnLoanUseCase {
-  constructor(private readonly bookRepo: BookRepository) {}
+export interface ReturnLoan {
+  (bookId: string): Promise<void>;
+}
 
-  async execute(bookId: string): Promise<void> {
-    const book = await this.bookRepo.findById(bookId);
+export function returnLoanUseCase(bookRepo: BookRepository): ReturnLoan {
+  return async function returnLoan(bookId: string): Promise<void> {
+    const book = await bookRepo.findById(bookId);
     if (!book) throw new Error("Libro no encontrado.");
 
-    book.return();
+    const updatedBook = returnBook(book);
 
-    await this.bookRepo.save(book);
-  }
+    await bookRepo.save(updatedBook);
+  };
 }

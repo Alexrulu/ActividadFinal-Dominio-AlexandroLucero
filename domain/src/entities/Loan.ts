@@ -1,24 +1,37 @@
-export class Loan {
-  constructor(
-    public readonly id: string,
-    public readonly userId: string,
-    public readonly bookId: string,
-    public readonly from: Date,
-    public readonly to: Date,
-    public returned: boolean = false,
-    public approved: boolean = false
-  ) {}
+export interface Loan {
+  id: string;
+  userId: string;
+  bookId: string;
+  from: Date;
+  to: Date;
+  returned: boolean;
+  approved: boolean;
+}
 
-  markAsReturned(): void {
-    this.returned = true;
-  }
+export function createLoan(params: {
+  id: string;
+  userId: string;
+  bookId: string;
+  from: Date;
+  to: Date;
+}): Loan {
+  return {
+    ...params,
+    returned: false,
+    approved: false,
+  };
+}
 
-  approve(): void {
-    if (this.approved) throw new Error("El préstamo ya fue aprobado");
-    this.approved = true;
-  }
+export function approveLoan(loan: Loan): void {
+  if (loan.approved) throw new Error('El préstamo ya fue aprobado');
+  loan.approved = true;
+}
 
-  isOverdue(now: Date): boolean {
-    return now > this.to && !this.returned;
-  }
+export function markLoanAsReturned(loan: Loan): void {
+  loan.returned = true;
+}
+
+
+export function isLoanOverdue(loan: Loan, now: Date): boolean {
+  return now > loan.to && !loan.returned;
 }

@@ -1,32 +1,41 @@
-interface AuthenticateUserInput {
+export interface AuthenticateUserInput {
   email: string;
   password: string;
 }
 
-interface AuthenticateUserOutput {
+export interface AuthenticateUserOutput {
   token: string;
   userId: string;
 }
 
-export class AuthenticateUserUseCase {
-  constructor(
-    private userRepository: any,
-    private hasher: { compare: (plain: string, hash: string) => Promise<boolean> },
-    private tokenGenerator: { generate: (payload: any) => string }
-  ) {}
+export interface UserRepository {
+  findByEmail: (email: string) => Promise<{ id: string; passwordHash: string } | null>;
+}
 
-  async execute(input: AuthenticateUserInput): Promise<AuthenticateUserOutput> {
-    const user = await this.userRepository.findByEmail(input.email);
-    if (!user) throw new Error('Usuario no encontrado');
+export interface Hasher {
+  compare: (plain: string, hash: string) => Promise<boolean>;
+}
 
-    const passwordMatch = await this.hasher.compare(input.password, user.passwordHash);
-    if (!passwordMatch) throw new Error('Contraseña incorrecta');
+export interface TokenGenerator {
+  generate: (payload: any) => string;
+}
 
-    const token = this.tokenGenerator.generate({ userId: user.id });
+export async function authenticateUserUseCase(
+  input: AuthenticateUserInput,
+  userRepository: UserRepository,
+  hasher: Hasher,
+  tokenGenerator: TokenGenerator
+): Promise<AuthenticateUserOutput> {
+  const user = await userRepository.findByEmail(input.email);
+  if (!user) throw new Error('Usuario no encontrado');
 
-    return {
-      token,
-      userId: user.id
-    };
-  }
+  const passwordMatch = await hasher.compare(input.password, user.passwordHash);
+  if (!passwordMatch) throw new Error('Contraseña incorrecta');
+
+  const token = tokenGenerator.generate({ userId: user.id });
+
+  return {
+    token,
+    userId: user.id,
+  };
 }

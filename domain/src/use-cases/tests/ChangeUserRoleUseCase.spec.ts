@@ -1,14 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { ChangeUserRoleUseCase } from '../ChangeUserRoleUseCase';
+import { changeUserRoleUseCase } from '../ChangeUserRoleUseCase';
 import { User } from '../../entities/User';
-import { UserRepository } from '../../repositories/UserRepository';
+import { createUser } from '../../entities/User';
 
 describe('ChangeUserRoleUseCase', () => {
-  let userRepository: UserRepository;
-  let useCase: ChangeUserRoleUseCase;
+  let userRepository: any;
 
-  const adminUser = new User('admin-1', 'Admin', 'admin@example.com', 'hashedpass', 'admin');
-  const normalUser = new User('user-1', 'User', 'user@example.com', 'hashedpass', 'user');
+  const adminUser = createUser('admin-1', 'Admin', 'admin@example.com', 'hashedpass', 'admin');
+  const normalUser = createUser('user-1', 'User', 'user@example.com', 'hashedpass',);
 
   beforeEach(() => {
     userRepository = {
@@ -16,7 +15,6 @@ describe('ChangeUserRoleUseCase', () => {
       findByEmail: vi.fn(),
       save: vi.fn(),
     };
-    useCase = new ChangeUserRoleUseCase(userRepository);
   });
 
   // Correcto funcionamiento ✅
@@ -25,11 +23,11 @@ describe('ChangeUserRoleUseCase', () => {
     (userRepository.findById as any)
       .mockResolvedValueOnce(adminUser) // para adminId
       .mockResolvedValueOnce(normalUser); // para targetUserId
-    await useCase.execute({
+    await changeUserRoleUseCase({
       adminId: 'admin-1',
       targetUserId: 'user-1',
       newRole: 'admin',
-    });
+    }, userRepository);
     expect(normalUser.role).toBe('admin');
     expect(userRepository.save).toHaveBeenCalledWith(normalUser);
   });
@@ -39,23 +37,15 @@ describe('ChangeUserRoleUseCase', () => {
   it('debería lanzar error si el solicitante no existe', async () => {
     (userRepository.findById as any).mockResolvedValueOnce(null);
     await expect(() =>
-      useCase.execute({
-        adminId: 'admin-1',
-        targetUserId: 'user-1',
-        newRole: 'admin',
-      }),
+      changeUserRoleUseCase({ adminId: 'user-1', targetUserId: 'user-2', newRole: 'admin' }, userRepository),
     ).rejects.toThrow('Usuario administrador no encontrado');
   });
 
   it('debería lanzar error si el solicitante no es admin', async () => {
-    const notAdmin = new User('user-2', 'User2', 'u2@example.com', 'hash');
+    const notAdmin = createUser('user-2', 'User2', 'u2@example.com', 'hash');
     (userRepository.findById as any).mockResolvedValueOnce(notAdmin);
     await expect(() =>
-      useCase.execute({
-        adminId: 'user-2',
-        targetUserId: 'user-1',
-        newRole: 'admin',
-      }),
+      changeUserRoleUseCase({ adminId: 'user-1', targetUserId: 'user-2', newRole: 'admin' }, userRepository),
     ).rejects.toThrow('Solo los administradores pueden cambiar roles');
   });
 
@@ -64,11 +54,7 @@ describe('ChangeUserRoleUseCase', () => {
       .mockResolvedValueOnce(adminUser) // adminId
       .mockResolvedValueOnce(null); // targetUserId
     await expect(() =>
-      useCase.execute({
-        adminId: 'admin-1',
-        targetUserId: 'user-1',
-        newRole: 'admin',
-      }),
+      changeUserRoleUseCase({ adminId: 'admin-1', targetUserId: 'user-2', newRole: 'admin' }, userRepository),
     ).rejects.toThrow('Usuario no encontrado');
   });
   

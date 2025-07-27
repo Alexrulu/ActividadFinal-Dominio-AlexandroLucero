@@ -1,57 +1,60 @@
 import { BookRepository } from "../repositories/BookRepository";
 import { LoanRepository } from "../repositories/LoanRepository";
-import { Loan } from "../entities/Loan";
+import { hasAvailableCopies, borrowBook } from "../entities/Book";
+import { createLoan } from "../entities/Loan";
+import { randomUUID } from "crypto";
 
-type RequestLoanInput = {
+export type RequestLoanInput = {
   userId: string;
   bookId: string;
   durationInMonths: number;
 };
 
-export class RequestLoanUseCase {
+export type RequestLoanDeps = {
+  bookRepo: BookRepository;
+  loanRepo: LoanRepository;
+};
 
-  constructor(
-    private readonly bookRepo: BookRepository,
-    private readonly loanRepo: LoanRepository
-  ) {}
+export async function requestLoanUseCase(
+  input: RequestLoanInput,
+  deps: RequestLoanDeps
+): Promise<void> {
+  const { bookRepo, loanRepo } = deps;
+  const { userId, bookId, durationInMonths } = input;
 
-  async execute(input: RequestLoanInput): Promise<void> {
-
-    if (input.durationInMonths !== 1 && input.durationInMonths !== 2) {
-      throw new Error("La duración máxima para el préstamo es de 2 meses");
-    }
-
-    const existingLoan = await this.loanRepo.findActiveByUserAndBook(input.userId, input.bookId);
-    const book = await this.bookRepo.findById(input.bookId);
-
-    if (existingLoan && !existingLoan.returned) {
-      throw new Error("El libro ya se te fue prestado");
-    }
-
-    if (!book) {
-      throw new Error("Libro no encontrado");
-    }
-
-    if (!book.hasAvailableCopies()) {
-      throw new Error("No hay copias disponibles para prestar");
-    }
-
-    const now = new Date();
-    const returnDate = new Date(
-      now.getFullYear(),
-      now.getMonth() + input.durationInMonths,
-      now.getDate()
-    );
-
-    const loan = new Loan(
-      crypto.randomUUID(),
-      input.userId,
-      input.bookId,
-      now,
-      returnDate,
-      false
-    );
-
-    await this.loanRepo.create(loan);
+  if (durationInMonths !== 1 && durationInMonths !== 2) {
+    throw new Error("La duración máxima para el préstamo es de 2 meses");
   }
+
+  const existingLoan = await loanRepo.findActiveByUserAndBook(userId, bookId);
+  const book = await bookRepo.findById(bookId);
+
+  if (!book) {
+    throw new Error("Libro no encontrado");
+  }
+
+  if (existingLoan && !existingLoan.returned) {
+    throw new Error("El libro ya se te fue prestado");
+  }
+
+  if (!hasAvailableCopies(book)) {
+    throw new Error("No hay copias disponibles para prestar");
+  }
+
+  const now = new Date();
+  const returnDate = new Date(
+    now.getFullYear(),
+    now.getMonth() + durationInMonths,
+    now.getDate()
+  );
+
+  const loan = createLoan({
+    id: randomUUID(),
+    userId,
+    bookId,
+    from: now,
+    to: returnDate
+  });
+
+  await loanRepo.create(loan);
 }

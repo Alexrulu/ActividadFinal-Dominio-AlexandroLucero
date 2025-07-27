@@ -1,29 +1,44 @@
-export class Book {
-  constructor(
-    public readonly id: string,
-    public title: string,
-    public author: string,
-    public totalCopies: number,
-    public borrowedCopies: number = 0
-  ) {}
+export interface Book {
+  id: string
+  title: string
+  author: string
+  totalCopies: number
+  borrowedCopies: number
+}
 
-  hasAvailableCopies(): boolean {
-    return this.borrowedCopies < this.totalCopies;
+export function hasAvailableCopies(book: Book): boolean {
+  return book.borrowedCopies < book.totalCopies
+}
+
+export function createBook(
+  id: string,
+  title: string,
+  author: string,
+  totalCopies: number
+): Book {
+  return {
+    id,
+    title,
+    author,
+    totalCopies,
+    borrowedCopies: 0,
+  };
+}
+
+export function borrowBook(book: Book): Book {
+  if (!hasAvailableCopies(book)) {
+    throw new Error("No hay más copias disponibles.")
   }
-
-  borrow(): void {
-    if (!this.hasAvailableCopies()) {
-      throw new Error("No hay más copias disponibles.");
-    }
-    this.borrowedCopies++;
-  }
-
-  return(): void {
-    if (this.borrowedCopies > 0) {
-      this.borrowedCopies--;
-    } else {
-      throw new Error("No hay copias para devolver.");
-    }
+  return {
+    ...book,
+    borrowedCopies: book.borrowedCopies + 1,
   }
 }
 
+export function returnBook(book: Book): Book {
+  if (book.borrowedCopies <= 0) {
+    throw new Error("No hay copias para devolver.")
+  }
+  book.borrowedCopies -= 1;
+  return book;
+}

@@ -1,4 +1,5 @@
 import { Book } from "../entities/Book";
+import { createBook } from "../entities/Book";
 import { BookRepository } from "../repositories/BookRepository";
 
 interface AddBookInput {
@@ -19,41 +20,46 @@ interface DeleteBookInput {
   id: string;
 }
 
-export class ManageBooksUseCase {
-  constructor(private readonly bookRepo: BookRepository) {}
+export async function addBookUseCase(
+  input: AddBookInput,
+  bookRepo: BookRepository
+): Promise<void> {
+  const existing = await bookRepo.findById(input.id);
+  if (existing) throw new Error("El libro ya existe");
 
-  async addBook(input: AddBookInput): Promise<void> {
-    const existing = await this.bookRepo.findById(input.id);
-    if (existing) throw new Error("El libro ya existe");
+  const book = createBook(input.id, input.title, input.author, input.totalCopies);
+  await bookRepo.save(book);
+}
 
-    const book = new Book(input.id, input.title, input.author, input.totalCopies);
-    await this.bookRepo.save(book);
-  }
+export async function updateBookUseCase(
+  input: UpdateBookInput,
+  bookRepo: BookRepository
+): Promise<void> {
+  const book = await bookRepo.findById(input.id);
+  if (!book) throw new Error("Libro no encontrado");
 
-  async updateBook(input: UpdateBookInput): Promise<void> {
-    const book = await this.bookRepo.findById(input.id);
-    if (!book) throw new Error("Libro no encontrado");
-
-    if (input.title !== undefined) book.title = input.title;
-    if (input.author !== undefined) book.author = input.author;
-    if (input.totalCopies !== undefined) {
-      if (input.totalCopies < book.borrowedCopies) {
-        throw new Error("No se puede reducir totalCopies por debajo de copias prestadas");
-      }
-      book.totalCopies = input.totalCopies;
+  if (input.title !== undefined) book.title = input.title;
+  if (input.author !== undefined) book.author = input.author;
+  if (input.totalCopies !== undefined) {
+    if (input.totalCopies < book.borrowedCopies) {
+      throw new Error("No se puede reducir totalCopies por debajo de copias prestadas");
     }
-
-    await this.bookRepo.save(book);
+    book.totalCopies = input.totalCopies;
   }
 
-  async deleteBook(input: DeleteBookInput): Promise<void> {
-    const book = await this.bookRepo.findById(input.id);
-    if (!book) throw new Error("Libro no encontrado");
+  await bookRepo.save(book);
+}
 
-    if (book.borrowedCopies > 0) {
-      throw new Error("No se puede eliminar un libro con copias prestadas");
-    }
+export async function deleteBookUseCase(
+  input: DeleteBookInput,
+  bookRepo: BookRepository
+): Promise<void> {
+  const book = await bookRepo.findById(input.id);
+  if (!book) throw new Error("Libro no encontrado");
 
-    await this.bookRepo.delete(input.id);
+  if (book.borrowedCopies > 0) {
+    throw new Error("No se puede eliminar un libro con copias prestadas");
   }
+
+  await bookRepo.delete(input.id);
 }

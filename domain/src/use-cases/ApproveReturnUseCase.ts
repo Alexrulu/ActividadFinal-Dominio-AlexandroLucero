@@ -1,37 +1,24 @@
 import { LoanRepository } from "../repositories/LoanRepository";
+import { markLoanAsReturned } from "../entities/Loan";
+import { returnBook } from "../entities/Book";
 import { BookRepository } from "../repositories/BookRepository";
 
-interface ApproveReturnDTO {
-  loanId: string;
-}
+export async function approveReturnUseCase(
+  input: { loanId: string },
+  loanRepo: LoanRepository,
+  bookRepo: BookRepository
+): Promise<void> {
+  const loan = await loanRepo.findById(input.loanId);
+  if (!loan) throw new Error("Préstamo no encontrado");
 
-export class ApproveReturnUseCase {
-  constructor(
-    private readonly loanRepository: LoanRepository,
-    private readonly bookRepository: BookRepository
-  ) {}
+  if (loan.returned) throw new Error("El préstamo ya fue devuelto");
 
-  async execute({ loanId }: ApproveReturnDTO): Promise<void> {
-    const loan = await this.loanRepository.findById(loanId);
-    if (!loan) {
-      throw new Error("Préstamo no encontrado");
-    }
+  const book = await bookRepo.findById(loan.bookId);
+  if (!book) throw new Error("Libro no encontrado");
 
-    if (loan.returned) {
-      throw new Error("El préstamo ya fue devuelto");
-    }
+  markLoanAsReturned(loan);
+  const updatedBook = returnBook(book);
 
-    loan.markAsReturned();
-
-    const book = await this.bookRepository.findById(loan.bookId);
-    if (!book) {
-      throw new Error("Libro no encontrado");
-    }
-
-    book.return();
-
-    // Persistencia
-    await this.loanRepository.create(loan); // o update
-    await this.bookRepository.save(book);   // o update
-  }
+  await loanRepo.save(loan);
+  await bookRepo.save(updatedBook);
 }

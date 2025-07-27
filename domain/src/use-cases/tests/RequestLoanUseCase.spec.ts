@@ -1,31 +1,22 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { RequestLoanUseCase } from "../RequestLoanUseCase";
+import { requestLoanUseCase } from "../RequestLoanUseCase";
 import { Book } from "../../entities/Book";
-import { Loan } from "../../entities/Loan";
+import { approveLoan, Loan } from "../../entities/Loan";
+import { createLoan } from "../../entities/Loan";
+import { createBook } from "../../entities/Book";
 import type { BookRepository } from "../../repositories/BookRepository";
 import type { LoanRepository } from "../../repositories/LoanRepository";
 
 describe("RequestLoanUseCase", () => {
 
-  let mockBookRepo: BookRepository = {
-    findById: vi.fn(),
-    save: vi.fn(),
-    findAll: vi.fn().mockResolvedValue([]),
-  };
-  
-  let mockLoanRepo: LoanRepository = {
-    findActiveByUserAndBook: vi.fn().mockResolvedValue(null),
-    findById: vi.fn().mockResolvedValue(null),
-    create: vi.fn(),
-    save: vi.fn(),
-    findAll: vi.fn(),
-    findByUserId: vi.fn(),
-  };
+  let mockBookRepo: BookRepository;
+  let mockLoanRepo: LoanRepository;
   beforeEach(() => {
     mockBookRepo = {
       findById: vi.fn(),
       save: vi.fn(),
       findAll: vi.fn().mockResolvedValue([]),
+      delete: vi.fn(),
     };
     mockLoanRepo = {
       findActiveByUserAndBook: vi.fn().mockResolvedValue(null),
@@ -40,14 +31,14 @@ describe("RequestLoanUseCase", () => {
   // Correcto funcionamiento ✅
 
   it("debería crear un préstamo sin modificar el stock", async () => {
-    const book = new Book("libro-1", "El principito", "Antoine de Saint-Exupéry", 5, 2);
+    const book = createBook("libro-1", "El principito", "Antoine de Saint-Exupéry", 5);
+    book.borrowedCopies = 2;
     (mockBookRepo.findById as any).mockResolvedValue(book);
-    const useCase = new RequestLoanUseCase(mockBookRepo, mockLoanRepo);
-    await useCase.execute({
+    await requestLoanUseCase({
       userId: "usuario-1",
       bookId: "libro-1",
       durationInMonths: 1,
-    });
+    }, { bookRepo: mockBookRepo, loanRepo: mockLoanRepo });
     expect(mockLoanRepo.create).toHaveBeenCalledWith(
       expect.objectContaining({
         userId: "usuario-1",
@@ -59,14 +50,14 @@ describe("RequestLoanUseCase", () => {
   });
 
   it("debería crear una solicitud de préstamo con duración de 2 meses", async () => {
-    const book = new Book("libro-1", "El principito", "Antoine de Saint-Exupéry", 5, 2);
+    const book = createBook("libro-1", "El principito", "Antoine de Saint-Exupéry", 5);
+    book.borrowedCopies = 2;
     (mockBookRepo.findById as any).mockResolvedValue(book);
-    const useCase = new RequestLoanUseCase(mockBookRepo, mockLoanRepo);
-    await useCase.execute({
+    await requestLoanUseCase({
       userId: "usuario-1",
       bookId: "libro-1",
       durationInMonths: 2,
-    });
+    }, { bookRepo: mockBookRepo, loanRepo: mockLoanRepo });
     expect(mockLoanRepo.create).toHaveBeenCalled();
     const createdLoan = (mockLoanRepo.create as any).mock.calls[0][0];
     expect(createdLoan.userId).toBe("usuario-1");
@@ -78,14 +69,14 @@ describe("RequestLoanUseCase", () => {
   });
 
   it("debería crear una solicitud de préstamo con duración de 1 mes", async () => {
-    const book = new Book("libro-1", "El principito", "Antoine de Saint-Exupéry", 5, 2);
+    const book = createBook("libro-1", "El principito", "Antoine de Saint-Exupéry", 5);
+    book.borrowedCopies = 2;
     (mockBookRepo.findById as any).mockResolvedValue(book);
-    const useCase = new RequestLoanUseCase(mockBookRepo, mockLoanRepo);
-    await useCase.execute({
+    await requestLoanUseCase({
       userId: "usuario-1",
       bookId: "libro-1",
       durationInMonths: 1,
-    });
+    }, { bookRepo: mockBookRepo, loanRepo: mockLoanRepo });
     expect(mockLoanRepo.create).toHaveBeenCalled();
     const createdLoan = (mockLoanRepo.create as any).mock.calls[0][0];
     expect(createdLoan.userId).toBe("usuario-1");
@@ -99,52 +90,45 @@ describe("RequestLoanUseCase", () => {
   // Errores esperados ❌
 
   it("debería lanzar un error si la duración del préstamo es mayor a 2 meses", async () => {
-    const useCase = new RequestLoanUseCase(mockBookRepo, mockLoanRepo);
-    await expect(useCase.execute({
-      userId: "usuario-1",
-      bookId: "libro-1",
-      durationInMonths: 3,
-    })).rejects.toThrow("La duración máxima para el préstamo es de 2 meses");
+    await expect(requestLoanUseCase({ userId: "usuario-1", bookId: "libro-1", durationInMonths: 3 }, 
+      { bookRepo: mockBookRepo, loanRepo: mockLoanRepo }))
+      .rejects.toThrow("La duración máxima para el préstamo es de 2 meses");
   });
 
   it("debería lanzar un error si el libro no existe", async () => {
     (mockBookRepo.findById as any).mockResolvedValue(null);
-    const useCase = new RequestLoanUseCase(mockBookRepo, mockLoanRepo);
-    await expect(useCase.execute({
-      userId: "usuario-1",
-      bookId: "libro-1",
-      durationInMonths: 1,
-    })).rejects.toThrow("Libro no encontrado");
+    await expect(requestLoanUseCase({ userId: "usuario-1", bookId: "libro-1", durationInMonths: 1 },
+      { bookRepo: mockBookRepo, loanRepo: mockLoanRepo }))
+      .rejects.toThrow("Libro no encontrado");
   });
 
   it("debería lanzar un error si el libro no tiene copias disponibles", async () => {
-    const book = new Book("libro-1", "El principito", "Antoine de Saint-Exupéry", 1, 1);
+    const book = createBook("libro-1", "El principito", "Antoine de Saint-Exupéry", 1);
+    book.borrowedCopies = 1; // No hay copias disponibles
     (mockBookRepo.findById as any).mockResolvedValue(book);
-    const useCase = new RequestLoanUseCase(mockBookRepo, mockLoanRepo);
-    await expect(useCase.execute({
-      userId: "usuario-1",
-      bookId: "libro-1",
-      durationInMonths: 1,
-    })).rejects.toThrow("No hay copias disponibles para prestar");
+    await expect(requestLoanUseCase({ userId: "usuario-1", bookId: "libro-1", durationInMonths: 1 }, 
+      { bookRepo: mockBookRepo, loanRepo: mockLoanRepo }))
+      .rejects.toThrow("No hay copias disponibles para prestar");
   });
 
-  it("debería lanzar un error si ya existe un préstamo activo para el usuario y el libro", async () => {
-    const mockLoan = new Loan("prestamo-1", "usuario-1", "libro-1", new Date(), new Date(), false, false);
-    (mockBookRepo.findById as any).mockResolvedValue(
-      new Book("libro-1", "El principito", "Antoine de Saint-Exupéry", 5, 2)
-    );
-    (mockLoanRepo.findActiveByUserAndBook as any).mockResolvedValue(mockLoan);
-    const useCase = new RequestLoanUseCase(mockBookRepo, mockLoanRepo);
-    await expect(
-      useCase.execute({
-        userId: "usuario-1",
-        bookId: "libro-1",
-        durationInMonths: 1,
-      })
-    ).rejects.toThrow("El libro ya se te fue prestado");
-  });
-
-
+  it("debería lanzar un error si ya existe un préstamo activo para el usuario con el libro", async () => {
+    const book = createBook("libro-1", "El principito", "Antoine de Saint-Exupéry", 5);
+    book.borrowedCopies = 2;
+    (mockBookRepo.findById as any).mockResolvedValue(book);
+    const loan = createLoan({ 
+      id: "1", 
+      userId: "usuario-1", 
+      bookId: "libro-1", 
+      from: new Date(), 
+      to: new Date()
+    });
+    (mockLoanRepo.findActiveByUserAndBook as any).mockResolvedValue(loan);
+    await expect(requestLoanUseCase(
+      { userId: "usuario-1", bookId: "libro-1", durationInMonths: 1 }, 
+      { bookRepo: mockBookRepo, loanRepo: mockLoanRepo }))
+      .rejects.toThrow("El libro ya se te fue prestado");
+    expect(mockLoanRepo.findActiveByUserAndBook).toHaveBeenCalledWith("usuario-1", "libro-1");
+  })
 });
 
   

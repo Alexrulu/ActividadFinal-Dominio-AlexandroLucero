@@ -1,15 +1,26 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { ListLoansUseCase } from '../ListLoansUseCase'
+import { listLoansUseCase } from '../ListLoansUseCase'
 import { Loan } from '../../entities/Loan'
-import { LoanRepository } from '../../repositories/LoanRepository'
+import { createLoan } from '../../entities/Loan'
 
 // Datos de prueba
-const loan1 = new Loan('1', 'user-1', 'book-1', new Date(), new Date())
-const loan2 = new Loan('2', 'user-2', 'book-2', new Date(), new Date())
+const loan1 = createLoan({
+  id: '1', 
+  userId: 'user-1', 
+  bookId: 'book-1', 
+  from: new Date(), 
+  to: new Date()
+})
+const loan2 = createLoan({
+  id: '2', 
+  userId: 'user-2', 
+  bookId: 'book-2', 
+  from: new Date(), 
+  to: new Date()
+})
 
 describe('ListLoansUseCase', () => {
-  let loanRepositoryMock: LoanRepository
-  let listLoansUseCase: ListLoansUseCase
+  let loanRepositoryMock: any
 
   beforeEach(() => {
     loanRepositoryMock = {
@@ -20,15 +31,14 @@ describe('ListLoansUseCase', () => {
       create: vi.fn(),
       save: vi.fn(),
     }
-    listLoansUseCase = new ListLoansUseCase(loanRepositoryMock)
   })
 
   it('debería retornar todos los préstamos si el requester es admin', async () => {
     ;(loanRepositoryMock.findAll as any).mockResolvedValue([loan1, loan2])
-    const result = await listLoansUseCase.execute({
+    const result = await listLoansUseCase({
       requesterId: 'admin-id',
       requesterRole: 'admin',
-    })
+    }, loanRepositoryMock)
     expect(result.loans).toEqual([loan1, loan2])
     expect(loanRepositoryMock.findAll).toHaveBeenCalledOnce()
     expect(loanRepositoryMock.findByUserId).not.toHaveBeenCalled()
@@ -36,10 +46,10 @@ describe('ListLoansUseCase', () => {
 
   it('debería retornar solo los préstamos del usuario si el requester es user', async () => {
     ;(loanRepositoryMock.findByUserId as any).mockResolvedValue([loan1])
-    const result = await listLoansUseCase.execute({
+    const result = await listLoansUseCase({
       requesterId: 'user-1',
       requesterRole: 'user',
-    })
+    }, loanRepositoryMock)
     expect(result.loans).toEqual([loan1])
     expect(loanRepositoryMock.findByUserId).toHaveBeenCalledWith('user-1')
     expect(loanRepositoryMock.findAll).not.toHaveBeenCalled()
@@ -47,10 +57,10 @@ describe('ListLoansUseCase', () => {
 
   it('debería manejar el caso cuando no hay préstamos', async () => {
     ;(loanRepositoryMock.findAll as any).mockResolvedValue([])
-    const result = await listLoansUseCase.execute({
+    const result = await listLoansUseCase({
       requesterId: 'admin-id',
       requesterRole: 'admin',
-    })
+    }, loanRepositoryMock)
     expect(result.loans).toEqual([])
   })
 })
