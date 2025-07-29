@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { listLoansUseCase } from '../ListLoansUseCase'
-import { Loan } from '../../entities/Loan'
 import { createLoan } from '../../entities/Loan'
 
 // Datos de prueba

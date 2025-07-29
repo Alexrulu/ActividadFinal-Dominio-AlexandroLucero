@@ -6,6 +6,7 @@ export interface Loan {
   to: Date;
   returned: boolean;
   approved: boolean;
+  returnRequested?: boolean
 }
 
 export function createLoan(params: {
@@ -19,6 +20,7 @@ export function createLoan(params: {
     ...params,
     returned: false,
     approved: false,
+    returnRequested: false
   };
 }
 
@@ -30,7 +32,6 @@ export function approveLoan(loan: Loan): void {
 export function markLoanAsReturned(loan: Loan): void {
   loan.returned = true;
 }
-
 
 export function isLoanOverdue(loan: Loan, now: Date): boolean {
   return now > loan.to && !loan.returned;

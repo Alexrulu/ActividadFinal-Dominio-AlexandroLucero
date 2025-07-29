@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { approveReturnUseCase } from '../ApproveReturnUseCase';
+import { approveReturnLoanUseCase } from '../ApproveReturnLoanUseCase';
 import { markLoanAsReturned } from '../../entities/Loan';
 import { createLoan } from '../../entities/Loan';
 import { createBook } from '../../entities/Book';
 
-describe('ApproveReturnUseCase', () => {
+describe('ApproveReturnLoanUseCase', () => {
   let loanRepository: any;
   let bookRepository: any;
 
@@ -21,23 +21,32 @@ describe('ApproveReturnUseCase', () => {
 
   // Correcto funcionamiento ✅
 
-  it('marca el préstamo como devuelto y reduce borrowedCopies del libro', async () => {
-    const loan = createLoan({
-      id: 'loan-id', 
-      userId: 'user-id', 
-      bookId: 'book-id', 
-      from: new Date(), to: new Date()
-    });
-    const book = createBook('book-id', 'Title', 'Author', 3);
-    book.borrowedCopies = 1;
-    loanRepository.findById.mockResolvedValue(loan);
-    bookRepository.findById.mockResolvedValue(book);
-    await approveReturnUseCase({ loanId: 'loan-id' }, loanRepository, bookRepository);
+  it("marca el préstamo como devuelto y reduce borrowedCopies del libro", async () => {
+    const loan = { id: 'loan-id', bookId: 'book-id', returned: false };
+    const book = { id: 'book-id', borrowedCopies: 1 };
+    const loanRepo = {
+      findActiveByUserAndBook: vi.fn(),
+      findById: vi.fn().mockResolvedValue(loan),
+      findAll: vi.fn(),
+      findByUserId: vi.fn(),
+      create: vi.fn(),
+      save: vi.fn(),
+    };
+    const bookRepo = {
+      findById: vi.fn().mockResolvedValue(book),
+      findAll: vi.fn(),
+      save: vi.fn(),
+      delete: vi.fn(),
+    };
+    await approveReturnLoanUseCase({ loanId: 'loan-id' }, loanRepo, bookRepo);
     expect(loan.returned).toBe(true);
-    expect(book.borrowedCopies).toBe(0);
+    const savedBook = bookRepo.save.mock.calls[0][0];
+    expect(savedBook.borrowedCopies).toBe(0);
   });
 
   it("llama a los metodos de persistencia correctamente", async () => {
+    const book = createBook('book-id', 'Title', 'Author', 3);
+    book.borrowedCopies = 1;
     const loan = createLoan({
       id: 'loan-id', 
       userId: 'user-id', 
@@ -45,20 +54,21 @@ describe('ApproveReturnUseCase', () => {
       from: new Date(), 
       to: new Date()
     });
-    const book = createBook('book-id', 'Title', 'Author', 3);
-    book.borrowedCopies = 1;
     loanRepository.findById.mockResolvedValue(loan);
     bookRepository.findById.mockResolvedValue(book);
-    await approveReturnUseCase({ loanId: 'loan-id' }, loanRepository, bookRepository);
+    await approveReturnLoanUseCase({ loanId: 'loan-id' }, loanRepository, bookRepository);
     expect(loanRepository.save).toHaveBeenCalledWith(loan);
-    expect(bookRepository.save).toHaveBeenCalledWith(book);
+    expect(bookRepository.save).toHaveBeenCalledWith(expect.objectContaining({
+      id: 'book-id',
+      borrowedCopies: 0
+    }));
   });
 
   // Errores esperados ❌
 
   it('lanza error si el préstamo no existe', async () => {
     loanRepository.findById.mockResolvedValue(null);
-    await expect(approveReturnUseCase({ loanId: 'loan-id' }, loanRepository, bookRepository))
+    await expect(approveReturnLoanUseCase({ loanId: 'loan-id' }, loanRepository, bookRepository))
       .rejects
       .toThrow('Préstamo no encontrado');
   });
@@ -76,9 +86,9 @@ describe('ApproveReturnUseCase', () => {
     });
     loanRepository.findById.mockResolvedValue(loan);
     markLoanAsReturned(loan); // Simulamos que ya fue devuelto
-    await expect(approveReturnUseCase({ loanId: 'loan-id' }, loanRepository, bookRepository))
+    await expect(approveReturnLoanUseCase({ loanId: 'loan-id' }, loanRepository, bookRepository))
       .rejects
-      .toThrow('El préstamo ya fue devuelto');
+      .toThrow('La solicitud de devolución ya fue aprobada');
   });
 
   it('lanza error si el libro no existe', async () => {
@@ -91,7 +101,7 @@ describe('ApproveReturnUseCase', () => {
     });
     loanRepository.findById.mockResolvedValue(loan);
     bookRepository.findById.mockResolvedValue(null);
-    await expect(approveReturnUseCase({ loanId: 'loan-id' }, loanRepository, bookRepository))
+    await expect(approveReturnLoanUseCase({ loanId: 'loan-id' }, loanRepository, bookRepository))
       .rejects
       .toThrow('Libro no encontrado');
   });
@@ -107,7 +117,7 @@ describe('ApproveReturnUseCase', () => {
     const book = createBook('book-id', 'Title', 'Author', 3);
     loanRepository.findById.mockResolvedValue(loan);
     bookRepository.findById.mockResolvedValue(book);
-    await expect(approveReturnUseCase({ loanId: 'loan-id' }, loanRepository, bookRepository))
+    await expect(approveReturnLoanUseCase({ loanId: 'loan-id' }, loanRepository, bookRepository))
       .rejects
       .toThrow('No hay copias para devolver.');
   });

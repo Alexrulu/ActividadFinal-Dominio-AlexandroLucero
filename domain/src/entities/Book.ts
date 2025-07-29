@@ -37,8 +37,10 @@ export function borrowBook(book: Book): Book {
 
 export function returnBook(book: Book): Book {
   if (book.borrowedCopies <= 0) {
-    throw new Error("No hay copias para devolver.")
+    throw new Error("No hay copias para devolver.");
   }
-  book.borrowedCopies -= 1;
-  return book;
+  return {
+    ...book,
+    borrowedCopies: book.borrowedCopies - 1,
+  };
 }

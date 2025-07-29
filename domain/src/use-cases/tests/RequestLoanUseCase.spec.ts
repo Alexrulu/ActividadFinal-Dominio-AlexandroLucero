@@ -1,7 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { requestLoanUseCase } from "../RequestLoanUseCase";
-import { Book } from "../../entities/Book";
-import { approveLoan, Loan } from "../../entities/Loan";
 import { createLoan } from "../../entities/Loan";
 import { createBook } from "../../entities/Book";
 import type { BookRepository } from "../../repositories/BookRepository";

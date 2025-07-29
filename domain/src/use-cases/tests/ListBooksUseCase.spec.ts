@@ -1,6 +1,6 @@
 import { it, expect, vi } from "vitest";
 import { listBooksUseCase } from "../ListBooksUseCase";
-import { Book, createBook } from "../../entities/Book";
+import { createBook } from "../../entities/Book";
 import { BookRepository } from "../../repositories/BookRepository";
 
 const book1 = createBook("1", "1984", "George Orwell", 3);

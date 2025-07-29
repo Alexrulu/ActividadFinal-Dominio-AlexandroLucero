@@ -5,12 +5,12 @@ export interface BookRepository {
   findAll(params: { page: number; limit: number }): Promise<Book[]>;
   save(book: Book): Promise<void>;
   delete(id: string): Promise<void>;
+}
 
-  /* prototipo de implementación de paginación
+/* prototipo de implementación de paginación
     async findAll({ page, limit }): Promise<Book[]> {
       return await db.book.findMany({
         skip: (page - 1) * limit,
         take: limit,
       });
     } */
-}

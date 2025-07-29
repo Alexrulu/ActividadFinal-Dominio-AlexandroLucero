@@ -1,17 +1,17 @@
-import { BookRepository } from "../repositories/BookRepository";
-import { returnBook } from "../entities/Book";
+import { LoanRepository } from "../repositories/LoanRepository";
 
-export interface ReturnLoan {
-  (bookId: string): Promise<void>;
+export async function returnLoanUseCase(
+  loanId: string,
+  loanRepo: LoanRepository
+): Promise<void> {
+  const loan = await loanRepo.findById(loanId);
+  if (!loan) throw new Error("Préstamo no encontrado");
+
+  if (loan.returned) throw new Error("El préstamo ya fue devuelto");
+  if (loan.returnRequested) throw new Error("La devolución ya fue solicitada");
+  
+  loan.returnRequested = true;
+
+  await loanRepo.save(loan);
 }
 
-export function returnLoanUseCase(bookRepo: BookRepository): ReturnLoan {
-  return async function returnLoan(bookId: string): Promise<void> {
-    const book = await bookRepo.findById(bookId);
-    if (!book) throw new Error("Libro no encontrado.");
-
-    const updatedBook = returnBook(book);
-
-    await bookRepo.save(updatedBook);
-  };
-}

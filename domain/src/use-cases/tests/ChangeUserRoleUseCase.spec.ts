@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { changeUserRoleUseCase } from '../ChangeUserRoleUseCase';
-import { User } from '../../entities/User';
 import { createUser } from '../../entities/User';
 
 describe('ChangeUserRoleUseCase', () => {
