@@ -1,6 +1,6 @@
 import { BookRepository } from "../repositories/BookRepository";
 import { LoanRepository } from "../repositories/LoanRepository";
-import { hasAvailableCopies, borrowBook } from "../entities/Book";
+import { hasAvailableCopies } from "../entities/Book";
 import { createLoan } from "../entities/Loan";
 import { randomUUID } from "crypto";
 
@@ -42,11 +42,9 @@ export async function requestLoanUseCase(
   }
 
   const now = new Date();
-  const returnDate = new Date(
-    now.getFullYear(),
-    now.getMonth() + durationInMonths,
-    now.getDate()
-  );
+  const returnDate = new Date(now);
+  returnDate.setDate(returnDate.getDate() + durationInMonths * 28);
+
 
   const loan = createLoan({
     id: randomUUID(),
