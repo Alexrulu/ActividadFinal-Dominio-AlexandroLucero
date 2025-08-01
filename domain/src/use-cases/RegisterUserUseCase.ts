@@ -2,6 +2,7 @@ import { UserRepository } from '../repositories/UserRepository'
 import { User } from '../entities/User'
 import { createUser } from '../entities/User'
 import { randomUUID } from 'crypto'
+import { HashService } from '../services/HashService'
 
 interface RegisterUserInput {
   name: string
@@ -12,7 +13,8 @@ interface RegisterUserInput {
 
 export async function registerUserUseCase(
   input: RegisterUserInput,
-  userRepository: UserRepository
+  userRepository: UserRepository,
+  hashService: HashService
 ): Promise<User> {
   const isValidEmail = (email: string): boolean => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -36,11 +38,13 @@ export async function registerUserUseCase(
     throw new Error('El email ya está en uso')
   }
 
+  const passwordHash = await hashService.hash(input.password)
+
   const user = createUser(
     randomUUID(),
     input.name.trim(),
     input.email.trim().toLowerCase(),
-    input.password,
+    passwordHash,
     input.role ?? 'user'
   )
 
