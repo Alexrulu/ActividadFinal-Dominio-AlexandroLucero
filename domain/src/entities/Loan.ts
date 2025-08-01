@@ -13,7 +13,7 @@ export function createLoan(params: {
   id: string;
   userId: string;
   bookId: string;
-  from: Date;
+  from: Date; // 1 month = 28 days according this Domain
   to: Date;
 }): Loan {
   return {

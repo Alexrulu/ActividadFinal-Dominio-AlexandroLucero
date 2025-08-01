@@ -1,19 +1,20 @@
 import express from 'express';
-import approveLoanRoute from './routes/approveLoanRoute';
-import approveReturnLoanRoute from './routes/approveReturnLoanRoute';
-import returnLoanRoute from './routes/returnLoanRoute';
+
 import requestLoanRoute from './routes/requestLoanRoute';
+import approveLoanRoute from './routes/approveLoanRoute';
+import returnLoanRoute from './routes/returnLoanRoute';
+import approveReturnLoanRoute from './routes/approveReturnLoanRoute';
+
 import registerUserRoute from './routes/registerUserRoute';
 import authenticateUserRoute from './routes/authenticateUserRoute';
 
 const app = express();
-
 app.use(express.json());
 
-app.use('/loans/approve', approveLoanRoute);
-app.use('/loans/approvereturn', approveReturnLoanRoute);
-app.use('/loans/return', returnLoanRoute);
 app.use('/loans/request', requestLoanRoute);
+app.use('/loans/approve', approveLoanRoute);
+app.use('/loans/return', returnLoanRoute);
+app.use('/loans/approvereturn', approveReturnLoanRoute);
 
 app.use('/users/register', registerUserRoute);
 app.use('/users/authenticate', authenticateUserRoute);

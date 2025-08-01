@@ -26,7 +26,7 @@ describe("RequestLoanUseCase", () => {
     };
   });
 
-  // Correcto funcionamiento ✅
+  // Success cases ✅
 
   it("debería crear un préstamo sin modificar el stock", async () => {
     const book = createBook("libro-1", "El principito", "Antoine de Saint-Exupéry", 5);
@@ -44,26 +44,7 @@ describe("RequestLoanUseCase", () => {
       })
     );
     expect(mockBookRepo.save).not.toHaveBeenCalled();
-    expect(book.borrowedCopies).toBe(2); // Verifica que el stock no se haya modificado
-  });
-
-  it("debería crear una solicitud de préstamo con duración de 2 meses", async () => {
-    const book = createBook("libro-1", "El principito", "Antoine de Saint-Exupéry", 5);
-    book.borrowedCopies = 2;
-    (mockBookRepo.findById as any).mockResolvedValue(book);
-    await requestLoanUseCase({
-      userId: "usuario-1",
-      bookId: "libro-1",
-      durationInMonths: 2,
-    }, { bookRepo: mockBookRepo, loanRepo: mockLoanRepo });
-    expect(mockLoanRepo.create).toHaveBeenCalled();
-    const createdLoan = (mockLoanRepo.create as any).mock.calls[0][0];
-    expect(createdLoan.userId).toBe("usuario-1");
-    expect(createdLoan.bookId).toBe("libro-1");
-    const from = createdLoan.from;
-    const to = createdLoan.to;
-    const durationInMonthsFunction = (to.getFullYear() - from.getFullYear()) * 12 + (to.getMonth() - from.getMonth());
-    expect(durationInMonthsFunction).toBe(2);
+    expect(book.borrowedCopies).toBe(2);
   });
 
   it("debería crear una solicitud de préstamo con duración de 1 mes", async () => {
@@ -79,13 +60,30 @@ describe("RequestLoanUseCase", () => {
     const createdLoan = (mockLoanRepo.create as any).mock.calls[0][0];
     expect(createdLoan.userId).toBe("usuario-1");
     expect(createdLoan.bookId).toBe("libro-1");
-    const from = createdLoan.from;
-    const to = createdLoan.to;
-    const durationInMonthsFunction = (to.getFullYear() - from.getFullYear()) * 12 + (to.getMonth() - from.getMonth());
-    expect(durationInMonthsFunction).toBe(1);
+    const expectedTo = new Date(createdLoan.from)
+    expectedTo.setDate(expectedTo.getDate() + 28); // 28 days = 1 month
+    expect(createdLoan.to.toISOString()).toBe(expectedTo.toISOString());
   });
 
-  // Errores esperados ❌
+  it("debería crear una solicitud de préstamo con duración de 2 meses", async () => {
+    const book = createBook("libro-1", "El principito", "Antoine de Saint-Exupéry", 5);
+    book.borrowedCopies = 2;
+    (mockBookRepo.findById as any).mockResolvedValue(book);
+    await requestLoanUseCase({
+      userId: "usuario-1",
+      bookId: "libro-1",
+      durationInMonths: 2,
+    }, { bookRepo: mockBookRepo, loanRepo: mockLoanRepo });
+    expect(mockLoanRepo.create).toHaveBeenCalled();
+    const createdLoan = (mockLoanRepo.create as any).mock.calls[0][0];
+    expect(createdLoan.userId).toBe("usuario-1");
+    expect(createdLoan.bookId).toBe("libro-1");
+    const expectedTo = new Date(createdLoan.from)
+    expectedTo.setDate(expectedTo.getDate() + 56); // 56 days = 2 months
+    expect(createdLoan.to.toISOString()).toBe(expectedTo.toISOString());
+  });
+
+  // Failure cases ❌
 
   it("debería lanzar un error si la duración del préstamo es mayor a 2 meses", async () => {
     await expect(requestLoanUseCase({ userId: "usuario-1", bookId: "libro-1", durationInMonths: 3 }, 
