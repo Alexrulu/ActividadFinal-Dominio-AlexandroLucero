@@ -15,8 +15,8 @@ export function createUser(
 ): User {
   return {
     id,
-    name,
-    email,
+    name: name.toLowerCase(),
+    email: email.toLowerCase(),
     passwordHash,
     role,
   };

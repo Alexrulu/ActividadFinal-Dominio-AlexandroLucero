@@ -19,7 +19,7 @@ describe('registerUserController', () => {
       .post('/register')
       .send({
         name: 'Alex',
-        email: 'alex@example.com',
+        email: 'Alex@example.com',
         password: '123456',
         role: 'user'
       })
@@ -27,7 +27,7 @@ describe('registerUserController', () => {
     expect(res.body).toEqual(
       expect.objectContaining({
         id: expect.any(String),
-        name: 'Alex',
+        name: 'alex',
         email: 'alex@example.com',
         role: 'user'
       })

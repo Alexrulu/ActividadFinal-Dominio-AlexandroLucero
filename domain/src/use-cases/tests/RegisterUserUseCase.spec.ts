@@ -39,7 +39,7 @@ describe('RegisterUserUseCase', () => {
       email: 'alex@example.com',
       password: '123456'
     }, repository, hashService)
-    expect(user.name).toBe('Alex')
+    expect(user.name).toBe('alex')
     expect(user.email).toBe('alex@example.com')
     expect(user.passwordHash).toBe('hashed_123456')
     expect(user.id).toBeDefined()
@@ -61,11 +61,11 @@ describe('RegisterUserUseCase', () => {
     const user1 = await repository.findByEmail('user1@example.com')
     const user2 = await repository.findByEmail('user2@example.com')
     expect(user1).toBeDefined()
-    expect(user1?.name).toBe('User One')
+    expect(user1?.name).toBe('user one')
     expect(user1?.email).toBe('user1@example.com')
     expect(user1?.passwordHash).toBe('hashed_password1')
     expect(user2).toBeDefined()
-    expect(user2?.name).toBe('User Two')
+    expect(user2?.name).toBe('user two')
     expect(user2?.email).toBe('user2@example.com')
   })
 
@@ -77,7 +77,7 @@ describe('RegisterUserUseCase', () => {
       email: 'fbmln@example.com',
       password: 'password123'
     }, repository, hashService)
-    expect(user.name).toBe('Default Role User')
+    expect(user.name).toBe('default role user')
     expect(user.email).toBe('fbmln@example.com')
     expect(user.passwordHash).toBe('hashed_password123')
     expect(user.id).toBeDefined()
