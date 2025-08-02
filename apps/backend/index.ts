@@ -8,6 +8,8 @@ import approveReturnLoanRoute from './routes/approveReturnLoanRoute';
 import registerUserRoute from './routes/registerUserRoute';
 import authenticateUserRoute from './routes/authenticateUserRoute';
 
+import listBooksRoute from './routes/listBooksRoute';
+
 const app = express();
 app.use(express.json());
 
@@ -18,6 +20,7 @@ app.use('/loans/approvereturn', approveReturnLoanRoute);
 
 app.use('/users/register', registerUserRoute);
 app.use('/users/authenticate', authenticateUserRoute);
+app.use('/books/list', listBooksRoute);
 
 
 

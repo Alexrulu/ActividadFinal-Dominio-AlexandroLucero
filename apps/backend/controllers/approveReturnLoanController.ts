@@ -20,7 +20,7 @@ export async function approveReturnLoanController(req: Request, res: Response) {
 
     await approveReturnLoanUseCase({ loanId }, loanRepo, bookRepo);
 
-    return res.status(200).json({ message: "Préstamo marcado como devuelto correctamente" });
+    return res.status(200).json({ message: "Préstamo marcado como devuelto correctamente", loan });
   } catch (err: any) {
     return res.status(400).json({ error: err.message });
   }
