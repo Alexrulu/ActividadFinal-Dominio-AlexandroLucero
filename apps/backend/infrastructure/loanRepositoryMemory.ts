@@ -2,16 +2,16 @@ import { Loan } from '../../../domain/src/entities/Loan'
 import { LoanRepository } from '../../../domain/src/repositories/LoanRepository'
 
 const db: Loan[] = [
-  {
-    id: "123",
-    userId: "user1",
-    bookId: "book1",
-    from: new Date(),
-    to: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // +7 días
-    returned: false,
-    approved: false,
-    returnRequested: false
-  }
+  // {
+  //   id: "123",
+  //   userId: "user1",
+  //   bookId: "book1",
+  //   from: new Date(),
+  //   to: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+  //   returned: false,
+  //   approved: false,
+  //   returnRequested: false
+  // }
 ]
 
 export class LoanRepositoryMemory implements LoanRepository {

@@ -3,6 +3,7 @@ import { LoanRepository } from "../repositories/LoanRepository";
 import { hasAvailableCopies } from "../entities/Book";
 import { createLoan } from "../entities/Loan";
 import { randomUUID } from "crypto";
+import { Loan } from "../entities/Loan";
 
 export type RequestLoanInput = {
   userId: string;
@@ -18,7 +19,7 @@ export type RequestLoanDeps = {
 export async function requestLoanUseCase(
   input: RequestLoanInput,
   deps: RequestLoanDeps
-): Promise<void> {
+): Promise<Loan> {
   const { bookRepo, loanRepo } = deps;
   const { userId, bookId, durationInMonths } = input;
 
@@ -55,4 +56,5 @@ export async function requestLoanUseCase(
   });
 
   await loanRepo.create(loan);
+  return loan;
 }

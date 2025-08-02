@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { requestLoanUseCase } from "../../../domain/src/use-cases/RequestLoanUseCase";
-import { bookRepo, loanRepo } from "./repositories";
+import { bookRepo, loanRepo, userRepo } from "./repositories";
 
 export async function requestLoanController(req: Request, res: Response) {
   try {
@@ -15,12 +15,28 @@ export async function requestLoanController(req: Request, res: Response) {
       return res.status(400).json({ error: "La duración debe ser un número" });
     }
 
-    await requestLoanUseCase(
+    const loan = await requestLoanUseCase(
       { userId, bookId, durationInMonths: duration },
       { bookRepo, loanRepo }
     );
 
-    return res.status(201).json({ message: "Préstamo registrado correctamente" });
+    const user = await userRepo.findById(userId);
+    const book = await bookRepo.findById(bookId);
+
+    if (!user || !book) {
+      return res.status(400).json({ error: "Usuario o libro no encontrado" });
+    }
+
+    return res.status(201).json({ 
+      message: "Préstamo solicitado correctamente", 
+      loanId: loan.id, 
+      userId, 
+      bookId, 
+      durationInMonths,
+      userName: user.name, 
+      userEmail: user.email, 
+      bookTitle: book.title
+    });
 
   } catch (error: any) {
     return res.status(400).json({ error: error.message || "Error al procesar la solicitud" });

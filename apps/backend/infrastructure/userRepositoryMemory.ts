@@ -3,13 +3,13 @@ import { UserRepository } from "../../../domain/src/repositories/UserRepository"
 
 export class UserRepositoryMemory implements UserRepository {
   private users: User[] = [
-    {
-      id: "user1",
-      name: "Admin",
-      email: "admin@example.com",
-      passwordHash: "hashed_password",
-      role: "admin",
-    }
+    // {
+    //   id: "user1",
+    //   name: "Admin",
+    //   email: "admin@example.com",
+    //   passwordHash: "hashed_password",
+    //   role: "admin",
+    // }
   ];
 
   async findById(id: string): Promise<User | null> {
