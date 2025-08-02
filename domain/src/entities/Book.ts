@@ -10,6 +10,8 @@ export function hasAvailableCopies(book: Book): boolean {
   return book.borrowedCopies < book.totalCopies
 }
 
+
+
 export function createBook(
   id: string,
   title: string,
@@ -18,8 +20,8 @@ export function createBook(
 ): Book {
   return {
     id,
-    title,
-    author,
+    title: title.toLowerCase(),
+    author: author.toLowerCase(),
     totalCopies,
     borrowedCopies: 0,
   };

@@ -3,17 +3,23 @@ import { BookRepository } from "../../../domain/src/repositories/BookRepository"
 
 export class BookRepositoryMemory implements BookRepository {
   private books: Book[] = [
-    {
-      id: "book1",
-      title: "Book 1",
-      author: "Author 1",
-      totalCopies: 10,
-      borrowedCopies: 0,
-    }
+    // example coding for http testing
+    // {
+    //   id: "book1",
+    //   title: "Book 1",
+    //   author: "Author 1",
+    //   totalCopies: 10,
+    //   borrowedCopies: 0,
+    // } 
   ];
 
   async findById(id: string): Promise<Book | null> {
     const book = this.books.find((b) => b.id === id);
+    return book ? { ...book } : null;
+  }
+
+  async findByTitleAndAuthor(title: string, author: string): Promise<Book | null> {
+    const book = this.books.find((b) => b.title === title && b.author === author);
     return book ? { ...book } : null;
   }
 

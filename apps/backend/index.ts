@@ -8,6 +8,7 @@ import approveReturnLoanRoute from './routes/approveReturnLoanRoute';
 import registerUserRoute from './routes/registerUserRoute';
 import authenticateUserRoute from './routes/authenticateUserRoute';
 
+import manageBooksRoute from './routes/manageBooksRoute';
 import listBooksRoute from './routes/listBooksRoute';
 
 const app = express();
@@ -20,6 +21,8 @@ app.use('/loans/approvereturn', approveReturnLoanRoute);
 
 app.use('/users/register', registerUserRoute);
 app.use('/users/authenticate', authenticateUserRoute);
+
+app.use('/books/manage', manageBooksRoute);
 app.use('/books/list', listBooksRoute);
 
 

@@ -1,9 +1,9 @@
 import { Book } from "../entities/Book";
 import { createBook } from "../entities/Book";
 import { BookRepository } from "../repositories/BookRepository";
+import { randomUUID } from "crypto";
 
 interface AddBookInput {
-  id: string;
   title: string;
   author: string;
   totalCopies: number;
@@ -23,12 +23,16 @@ interface DeleteBookInput {
 export async function addBookUseCase(
   input: AddBookInput,
   bookRepo: BookRepository
-): Promise<void> {
-  const existing = await bookRepo.findById(input.id);
-  if (existing) throw new Error("El libro ya existe");
+): Promise<string> {
+  const existing = await bookRepo.findByTitleAndAuthor((input.title).toLowerCase(), (input.author).toLowerCase());
 
-  const book = createBook(input.id, input.title, input.author, input.totalCopies);
+  if (existing) throw new Error("El libro ya existe");
+  if (input.totalCopies < 1) throw new Error("totalCopies debe ser mayor a 0");
+
+  const id = randomUUID();
+  const book = createBook(id, input.title, input.author, input.totalCopies);
   await bookRepo.save(book);
+  return id;
 }
 
 export async function updateBookUseCase(

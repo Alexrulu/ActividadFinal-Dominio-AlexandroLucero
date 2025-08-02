@@ -9,6 +9,7 @@ describe("ManageBooksUseCase", () => {
   beforeEach(() => {
     bookRepositoryMock = {
       findById: vi.fn(),
+      findByTitleAndAuthor: vi.fn(),
       save: vi.fn(),
       delete: vi.fn(),
     };
@@ -16,21 +17,20 @@ describe("ManageBooksUseCase", () => {
 
   describe("addBook", () => {
     it("debería crear un libro nuevo si no existe", async () => {
-      bookRepositoryMock.findById.mockResolvedValue(null);
+      bookRepositoryMock.findByTitleAndAuthor.mockResolvedValue(null);
       await addBookUseCase(
         {
-          id: "book1",
-          title: "Título 1",
-          author: "Autor 1",
+          title: "título 1",
+          author: "autor 1",
           totalCopies: 5,
         },
         bookRepositoryMock
       );
       expect(bookRepositoryMock.save).toHaveBeenCalledWith(
         expect.objectContaining({
-          id: "book1",
-          title: "Título 1",
-          author: "Autor 1",
+          id: expect.any(String),
+          title: "título 1",
+          author: "autor 1",
           totalCopies: 5,
           borrowedCopies: 0,
         })
@@ -38,13 +38,12 @@ describe("ManageBooksUseCase", () => {
     });
 
     it("debería lanzar error si el libro ya existe", async () => {
-      bookRepositoryMock.findById.mockResolvedValue(createBook("book1", "Existente", "Autor", 3));
+      bookRepositoryMock.findByTitleAndAuthor.mockResolvedValue(createBook("book1", "existente", "autor", 5));
       await expect(
         addBookUseCase(
           {
-            id: "book1",
-            title: "Título 1",
-            author: "Autor 1",
+            title: "existente",
+            author: "autor",
             totalCopies: 5,
           },
           bookRepositoryMock
@@ -55,18 +54,18 @@ describe("ManageBooksUseCase", () => {
 
   describe("updateBook", () => {
     it("debería actualizar los campos del libro", async () => {
-      const book = createBook("book1", "Antiguo", "Autor Antiguo", 5);
+      const book = createBook("book1", "antiguo", "autor antiguo", 5);
       book.borrowedCopies = 2;
       bookRepositoryMock.findById.mockResolvedValue(book);
       await updateBookUseCase(
         {
           id: "book1",
-          title: "Nuevo título",
+          title: "nuevo título",
           totalCopies: 6,
         },
         bookRepositoryMock
       );
-      expect(book.title).toBe("Nuevo título");
+      expect(book.title).toBe("nuevo título");
       expect(book.totalCopies).toBe(6);
       expect(bookRepositoryMock.save).toHaveBeenCalledWith(book);
     });
