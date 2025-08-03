@@ -8,6 +8,7 @@ import listLoansRoute from './routes/listLoansRoute';
 
 import registerUserRoute from './routes/registerUserRoute';
 import authenticateUserRoute from './routes/authenticateUserRoute';
+import changeUserRoleRoute from './routes/changeUserRoleRoute';
 
 import manageBooksRoute from './routes/manageBooksRoute';
 import listBooksRoute from './routes/listBooksRoute';
@@ -23,13 +24,10 @@ app.use('/loans/list', listLoansRoute);
 
 app.use('/users/register', registerUserRoute);
 app.use('/users/authenticate', authenticateUserRoute);
+app.use('/users/changeRole', changeUserRoleRoute)
 
 app.use('/books/manage', manageBooksRoute);
 app.use('/books/list', listBooksRoute);
-
-
-
-
 
 app.get('/', (req, res) => {
   res.send('Funcionando');

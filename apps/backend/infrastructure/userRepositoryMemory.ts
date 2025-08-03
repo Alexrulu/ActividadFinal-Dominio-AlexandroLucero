@@ -3,12 +3,20 @@ import { UserRepository } from "../../../domain/src/repositories/UserRepository"
 
 export class UserRepositoryMemory implements UserRepository {
   private users: User[] = [
+    // http testing
     // {
     //   id: "user1",
     //   name: "Admin",
     //   email: "admin@example.com",
     //   passwordHash: "hashed_password",
     //   role: "admin",
+    // },
+    // {
+    //   id: "user2",
+    //   name: "User",
+    //   email: "user@example.com",
+    //   passwordHash: "hashed_password",
+    //   role: "user",
     // }
   ];
 
