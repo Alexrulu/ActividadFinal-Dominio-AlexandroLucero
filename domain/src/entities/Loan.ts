@@ -25,7 +25,7 @@ export function createLoan(params: {
 }
 
 export function approveLoan(loan: Loan): void {
-  if (loan.approved) throw new Error('El préstamo ya fue aprobado');
+  if (loan.approved) throw new Error('El prestamo ya fue aprobado');
   loan.approved = true;
 }
 

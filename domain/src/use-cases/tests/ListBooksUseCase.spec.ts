@@ -11,7 +11,7 @@ const books = [book1, book2];
 
 // Correcto funcionamiento ✅
 
-it("debería retornar todos los libros del repositorio", async () => {
+it("deberia retornar todos los libros del repositorio", async () => {
   const mockRepo: BookRepository = {
     findById: vi.fn(),
     findByTitleAndAuthor: vi.fn(),
@@ -24,7 +24,7 @@ it("debería retornar todos los libros del repositorio", async () => {
   expect(result).toEqual(books);
 });
 
-it("debería llamar al repositorio con los parámetros correctos", async () => {
+it("deberia llamar al repositorio con los parámetros correctos", async () => {
   const mockRepo: BookRepository = {
     findById: vi.fn(),
     findByTitleAndAuthor: vi.fn(),
@@ -36,7 +36,7 @@ it("debería llamar al repositorio con los parámetros correctos", async () => {
   expect(mockRepo.findAll).toHaveBeenCalledWith({ page: 1, limit: 10 });
 });
 
-it("debería mostrar un solo libro si hay más de uno pero está limitado a 1", async () => {
+it("deberia mostrar un solo libro si hay más de uno pero está limitado a 1", async () => {
   const mockRepo: BookRepository = {
     findById: vi.fn(),
     findByTitleAndAuthor: vi.fn(),
@@ -55,7 +55,7 @@ it("debería mostrar un solo libro si hay más de uno pero está limitado a 1", 
 
 // Errores esperados ❌
 
-it("debería lanzar un error si el repositorio falla", async () => {
+it("deberia lanzar un error si el repositorio falla", async () => {
   const mockRepo: BookRepository = {
     findById: vi.fn(),
     findByTitleAndAuthor: vi.fn(),
@@ -67,7 +67,7 @@ it("debería lanzar un error si el repositorio falla", async () => {
   .rejects.toThrow("Error en el repositorio");
 });
 
-it("debería lanzar un error si el repositorio retorna null", async () => {
+it("deberia lanzar un error si el repositorio retorna null", async () => {
   const mockRepo: BookRepository = {
     findById: vi.fn(),
     findByTitleAndAuthor: vi.fn(),

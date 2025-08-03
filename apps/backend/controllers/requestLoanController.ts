@@ -12,7 +12,7 @@ export async function requestLoanController(req: Request, res: Response) {
 
     const duration = Number(durationInMonths);
     if (isNaN(duration)) {
-      return res.status(400).json({ error: "La duración debe ser un número" });
+      return res.status(400).json({ error: "La duracion debe ser un número" });
     }
 
     const loan = await requestLoanUseCase(
@@ -28,7 +28,7 @@ export async function requestLoanController(req: Request, res: Response) {
     }
 
     return res.status(201).json({ 
-      message: "Préstamo solicitado correctamente", 
+      message: "Prestamo solicitado correctamente", 
       loanId: loan.id, 
       userId, 
       bookId, 

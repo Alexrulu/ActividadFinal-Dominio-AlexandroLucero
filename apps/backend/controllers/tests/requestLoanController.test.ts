@@ -41,7 +41,7 @@ describe("requestLoanUseCase", () => {
     };
   });
 
-  it("debería registrar un préstamo correctamente", async () => {
+  it("deberia registrar un prestamo correctamente", async () => {
     const book = buildBook();
     bookRepo.findById.mockResolvedValue(book);
     loanRepo.findActiveByUserAndBook.mockResolvedValue(null);
@@ -52,16 +52,16 @@ describe("requestLoanUseCase", () => {
     expect(loanRepo.create).toHaveBeenCalledOnce();
   });
 
-  it("debería lanzar error si duración es inválida", async () => {
+  it("deberia lanzar error si duracion es inválida", async () => {
     await expect(() =>
       requestLoanUseCase(
         { userId: "user-1", bookId: "book-123", durationInMonths: 3 },
         { bookRepo, loanRepo }
       )
-    ).rejects.toThrow("La duración máxima para el préstamo es de 2 meses");
+    ).rejects.toThrow("La duracion máxima para el prestamo es de 2 meses");
   });
 
-  it("debería lanzar error si el libro no existe", async () => {
+  it("deberia lanzar error si el libro no existe", async () => {
     bookRepo.findById.mockResolvedValue(null);
     await expect(() =>
       requestLoanUseCase(
@@ -71,7 +71,7 @@ describe("requestLoanUseCase", () => {
     ).rejects.toThrow("Libro no encontrado");
   });
 
-  it("debería lanzar error si ya hay un préstamo activo sin devolución", async () => {
+  it("deberia lanzar error si ya hay un prestamo activo sin devolucion", async () => {
     const book = buildBook();
     bookRepo.findById.mockResolvedValue(book);
     const activeLoan = buildLoan({ returned: false });
@@ -84,7 +84,7 @@ describe("requestLoanUseCase", () => {
     ).rejects.toThrow("El libro ya se te fue prestado");
   });
 
-  it("debería lanzar error si no hay copias disponibles", async () => {
+  it("deberia lanzar error si no hay copias disponibles", async () => {
     const book = buildBook({ totalCopies: 2, borrowedCopies: 2 });
     bookRepo.findById.mockResolvedValue(book);
     loanRepo.findActiveByUserAndBook.mockResolvedValue(null);

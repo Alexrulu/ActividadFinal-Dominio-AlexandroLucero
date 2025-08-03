@@ -9,15 +9,15 @@ export async function approveLoanUseCase(
   bookRepo: BookRepository
 ): Promise<void> {
   const loan = await loanRepo.findById(input.loanId);
-  if (!loan) throw new Error("Préstamo no encontrado");
+  if (!loan) throw new Error("Prestamo no encontrado");
 
-  if (loan.approved) throw new Error("El préstamo ya fue aprobado");
+  if (loan.approved) throw new Error("El prestamo ya fue aprobado");
 
   const book = await bookRepo.findById(loan.bookId);
   if (!book) throw new Error("Libro no encontrado");
 
   if (!hasAvailableCopies(book)) {
-    throw new Error("No hay copias disponibles para aprobar el préstamo");
+    throw new Error("No hay copias disponibles para aprobar el prestamo");
   }
 
   const updatedBook = borrowBook(book);

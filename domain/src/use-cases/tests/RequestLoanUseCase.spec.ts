@@ -12,6 +12,7 @@ describe("RequestLoanUseCase", () => {
   beforeEach(() => {
     mockBookRepo = {
       findById: vi.fn(),
+      findByTitleAndAuthor: vi.fn(),
       save: vi.fn(),
       findAll: vi.fn().mockResolvedValue([]),
       delete: vi.fn(),
@@ -28,7 +29,7 @@ describe("RequestLoanUseCase", () => {
 
   // Success cases ✅
 
-  it("debería crear un préstamo sin modificar el stock", async () => {
+  it("deberia crear un prestamo sin modificar el stock", async () => {
     const book = createBook("libro-1", "El principito", "Antoine de Saint-Exupéry", 5);
     book.borrowedCopies = 2;
     (mockBookRepo.findById as any).mockResolvedValue(book);
@@ -47,7 +48,7 @@ describe("RequestLoanUseCase", () => {
     expect(book.borrowedCopies).toBe(2);
   });
 
-  it("debería crear una solicitud de préstamo con duración de 1 mes", async () => {
+  it("deberia crear una solicitud de prestamo con duracion de 1 mes", async () => {
     const book = createBook("libro-1", "El principito", "Antoine de Saint-Exupéry", 5);
     book.borrowedCopies = 2;
     (mockBookRepo.findById as any).mockResolvedValue(book);
@@ -65,7 +66,7 @@ describe("RequestLoanUseCase", () => {
     expect(createdLoan.to.toISOString()).toBe(expectedTo.toISOString());
   });
 
-  it("debería crear una solicitud de préstamo con duración de 2 meses", async () => {
+  it("deberia crear una solicitud de prestamo con duracion de 2 meses", async () => {
     const book = createBook("libro-1", "El principito", "Antoine de Saint-Exupéry", 5);
     book.borrowedCopies = 2;
     (mockBookRepo.findById as any).mockResolvedValue(book);
@@ -85,20 +86,20 @@ describe("RequestLoanUseCase", () => {
 
   // Failure cases ❌
 
-  it("debería lanzar un error si la duración del préstamo es mayor a 2 meses", async () => {
+  it("deberia lanzar un error si la duracion del prestamo es mayor a 2 meses", async () => {
     await expect(requestLoanUseCase({ userId: "usuario-1", bookId: "libro-1", durationInMonths: 3 }, 
       { bookRepo: mockBookRepo, loanRepo: mockLoanRepo }))
-      .rejects.toThrow("La duración máxima para el préstamo es de 2 meses");
+      .rejects.toThrow("La duracion máxima para el prestamo es de 2 meses");
   });
 
-  it("debería lanzar un error si el libro no existe", async () => {
+  it("deberia lanzar un error si el libro no existe", async () => {
     (mockBookRepo.findById as any).mockResolvedValue(null);
     await expect(requestLoanUseCase({ userId: "usuario-1", bookId: "libro-1", durationInMonths: 1 },
       { bookRepo: mockBookRepo, loanRepo: mockLoanRepo }))
       .rejects.toThrow("Libro no encontrado");
   });
 
-  it("debería lanzar un error si el libro no tiene copias disponibles", async () => {
+  it("deberia lanzar un error si el libro no tiene copias disponibles", async () => {
     const book = createBook("libro-1", "El principito", "Antoine de Saint-Exupéry", 1);
     book.borrowedCopies = 1; // No hay copias disponibles
     (mockBookRepo.findById as any).mockResolvedValue(book);
@@ -107,7 +108,7 @@ describe("RequestLoanUseCase", () => {
       .rejects.toThrow("No hay copias disponibles para prestar");
   });
 
-  it("debería lanzar un error si ya existe un préstamo activo para el usuario con el libro", async () => {
+  it("deberia lanzar un error si ya existe un prestamo activo para el usuario con el libro", async () => {
     const book = createBook("libro-1", "El principito", "Antoine de Saint-Exupéry", 5);
     book.borrowedCopies = 2;
     (mockBookRepo.findById as any).mockResolvedValue(book);

@@ -30,27 +30,27 @@ describe('approveReturnLoanController', () => {
     await loanRepo.create(loan)
   })
 
-  it('marca préstamo como devuelto correctamente', async () => {
+  it('marca prestamo como devuelto correctamente', async () => {
     const res = await request(app)
       .post('/loans/return')
       .send({ loanId: 'loan1' })
     expect(res.statusCode).toBe(200)
-    expect(res.body.message).toBe('Préstamo marcado como devuelto correctamente')
+    expect(res.body.message).toBe('Prestamo marcado como devuelto correctamente')
     const updatedLoan = await loanRepo.findById('loan1')
     expect(updatedLoan?.returned).toBe(true)
     const updatedBook = await bookRepo.findById('book1')
     expect(updatedBook?.borrowedCopies).toBe(0)
   })
 
-  it('lanza error si el préstamo no existe', async () => {
+  it('lanza error si el prestamo no existe', async () => {
     const res = await request(app)
       .post('/loans/return')
       .send({ loanId: 'invalido' })
     expect(res.statusCode).toBe(400)
-    expect(res.body.error).toBe('Préstamo no encontrado')
+    expect(res.body.error).toBe('Prestamo no encontrado')
   })
 
-  it('lanza error si la solicitud de devolución ya fue aprobada', async () => {
+  it('lanza error si la solicitud de devolucion ya fue aprobada', async () => {
     const loan = await loanRepo.findById('loan1')
     if (loan) loan.returned = true
     await loanRepo.save(loan!)
@@ -58,7 +58,7 @@ describe('approveReturnLoanController', () => {
       .post('/loans/return')
       .send({ loanId: 'loan1' })
     expect(res.statusCode).toBe(400)
-    expect(res.body.error).toBe('La solicitud de devolución ya fue aprobada')
+    expect(res.body.error).toBe('La solicitud de devolucion ya fue aprobada')
   })
 
   it('lanza error si no se pasa loanId', async () => {
@@ -66,6 +66,6 @@ describe('approveReturnLoanController', () => {
       .post('/loans/return')
       .send({})
     expect(res.statusCode).toBe(400)
-    expect(res.body.error).toBe('Falta el ID del préstamo')
+    expect(res.body.error).toBe('Falta el ID del prestamo')
   })
 })

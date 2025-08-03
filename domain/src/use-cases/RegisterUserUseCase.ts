@@ -22,7 +22,7 @@ export async function registerUserUseCase(
   }
 
   if (!input.name || input.name.trim() === '') {
-    throw new Error('El nombre no puede estar vacío')
+    throw new Error('El nombre no puede estar vacio')
   }
 
   if (!isValidEmail(input.email)) {

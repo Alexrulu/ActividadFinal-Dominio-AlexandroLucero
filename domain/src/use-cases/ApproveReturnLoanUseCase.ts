@@ -9,9 +9,9 @@ export async function approveReturnLoanUseCase(
   bookRepo: BookRepository
 ): Promise<void> {
   const loan = await loanRepo.findById(input.loanId);
-  if (!loan) throw new Error("Préstamo no encontrado");
+  if (!loan) throw new Error("Prestamo no encontrado");
 
-  if (loan.returned) throw new Error("La solicitud de devolución ya fue aprobada");
+  if (loan.returned) throw new Error("La solicitud de devolucion ya fue aprobada");
 
   const book = await bookRepo.findById(loan.bookId);
   if (!book) throw new Error("Libro no encontrado");

@@ -43,7 +43,7 @@ export class LoanRepositoryMemory implements LoanRepository {
 
   async create(loan: Loan): Promise<void> {
     const exists = this.db.some(l => l.id === loan.id)
-    if (exists) throw new Error('El préstamo ya existe')
+    if (exists) throw new Error('El prestamo ya existe')
     this.db.push(loan)
   }
 

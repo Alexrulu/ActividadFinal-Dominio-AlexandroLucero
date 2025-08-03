@@ -25,7 +25,7 @@ describe('authenticateUserController', () => {
     vi.clearAllMocks();
   });
 
-  it('debería autenticar usuario correctamente y devolver token', async () => {
+  it('deberia autenticar usuario correctamente y devolver token', async () => {
     (userRepo.findByEmail as any).mockResolvedValue({
       id: 'user1',
       passwordHash: 'hashed_password'
@@ -45,7 +45,7 @@ describe('authenticateUserController', () => {
     expect(tokenGenerator.generate).toHaveBeenCalledWith({ userId: 'user1' });
   });
 
-  it('debería devolver error si usuario no existe', async () => {
+  it('deberia devolver error si usuario no existe', async () => {
     (userRepo.findByEmail as any).mockResolvedValue(null);
     const response = await request(app)
       .post('/login')
@@ -54,7 +54,7 @@ describe('authenticateUserController', () => {
     expect(response.body).toEqual({ error: 'Usuario no encontrado' });
   });
 
-  it('debería devolver error si la contraseña es incorrecta', async () => {
+  it('deberia devolver error si la contraseña es incorrecta', async () => {
     (userRepo.findByEmail as any).mockResolvedValue({
       id: 'user1',
       passwordHash: 'hashed_password'

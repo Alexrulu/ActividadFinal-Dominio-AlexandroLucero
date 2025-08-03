@@ -18,7 +18,7 @@ describe('ChangeUserRoleUseCase', () => {
 
   // Correcto funcionamiento ✅
 
-  it('debería cambiar el rol si el solicitante es admin', async () => {
+  it('deberia cambiar el rol si el solicitante es admin', async () => {
     (userRepository.findById as any)
       .mockResolvedValueOnce(adminUser) // para adminId
       .mockResolvedValueOnce(normalUser); // para targetUserId
@@ -33,14 +33,14 @@ describe('ChangeUserRoleUseCase', () => {
 
   // Errores esperados ❌
 
-  it('debería lanzar error si el solicitante no existe', async () => {
+  it('deberia lanzar error si el solicitante no existe', async () => {
     (userRepository.findById as any).mockResolvedValueOnce(null);
     await expect(() =>
       changeUserRoleUseCase({ adminId: 'user-1', targetUserId: 'user-2', newRole: 'admin' }, userRepository),
     ).rejects.toThrow('Usuario administrador no encontrado');
   });
 
-  it('debería lanzar error si el solicitante no es admin', async () => {
+  it('deberia lanzar error si el solicitante no es admin', async () => {
     const notAdmin = createUser('user-2', 'User2', 'u2@example.com', 'hash');
     (userRepository.findById as any).mockResolvedValueOnce(notAdmin);
     await expect(() =>
@@ -48,7 +48,7 @@ describe('ChangeUserRoleUseCase', () => {
     ).rejects.toThrow('Solo los administradores pueden cambiar roles');
   });
 
-  it('debería lanzar error si el usuario objetivo no existe', async () => {
+  it('deberia lanzar error si el usuario objetivo no existe', async () => {
     (userRepository.findById as any)
       .mockResolvedValueOnce(adminUser) // adminId
       .mockResolvedValueOnce(null); // targetUserId

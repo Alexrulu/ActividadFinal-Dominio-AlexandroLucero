@@ -24,12 +24,12 @@ describe('returnLoanController', () => {
     await loanRepo.create(loan)
   })
 
-  it('solicita devolución correctamente', async () => {
+  it('solicita devolucion correctamente', async () => {
     const res = await request(app)
       .post('/loans/return')
       .send({ loanId: 'loan1' })
     expect(res.statusCode).toBe(200)
-    expect(res.body.message).toBe('Devolución solicitada correctamente')
+    expect(res.body.message).toBe('Devolucion solicitada correctamente')
     const loan = await loanRepo.findById('loan1')
     expect(loan?.returnRequested).toBe(true)
   })
@@ -39,15 +39,15 @@ describe('returnLoanController', () => {
       .post('/loans/return')
       .send({})
     expect(res.statusCode).toBe(400)
-    expect(res.body.error).toBe('Falta el ID del préstamo')
+    expect(res.body.error).toBe('Falta el ID del prestamo')
   })
 
-  it('falla si préstamo no existe', async () => {
+  it('falla si prestamo no existe', async () => {
     const res = await request(app)
       .post('/loans/return')
       .send({ loanId: 'inexistente' })
     expect(res.statusCode).toBe(400)
-    expect(res.body.error).toBe('Préstamo no encontrado')
+    expect(res.body.error).toBe('Prestamo no encontrado')
   })
 
   it('falla si ya fue devuelto', async () => {
@@ -58,10 +58,10 @@ describe('returnLoanController', () => {
       .post('/loans/return')
       .send({ loanId: 'loan1' })
     expect(res.statusCode).toBe(400)
-    expect(res.body.error).toBe('El préstamo ya fue devuelto')
+    expect(res.body.error).toBe('El prestamo ya fue devuelto')
   })
 
-  it('falla si ya se solicitó la devolución', async () => {
+  it('falla si ya se solicito la devolucion', async () => {
     const loan = await loanRepo.findById('loan1')
     if (loan) loan.returnRequested = true
     await loanRepo.save(loan!)
@@ -69,6 +69,6 @@ describe('returnLoanController', () => {
       .post('/loans/return')
       .send({ loanId: 'loan1' })
     expect(res.statusCode).toBe(400)
-    expect(res.body.error).toBe('La devolución ya fue solicitada')
+    expect(res.body.error).toBe('La devolucion ya fue solicitada')
   })
 })

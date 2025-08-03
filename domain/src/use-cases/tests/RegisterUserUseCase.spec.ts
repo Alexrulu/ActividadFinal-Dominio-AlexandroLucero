@@ -31,7 +31,7 @@ describe('RegisterUserUseCase', () => {
 
   // Correcto funcionamiento ✅
 
-  it('debería registrar el usuario si el email no está en uso', async () => {
+  it('deberia registrar el usuario si el email no está en uso', async () => {
     const repository = new InMemoryUserRepository()
     const hashService = new FakeHashService()
     const user = await registerUserUseCase({
@@ -45,7 +45,7 @@ describe('RegisterUserUseCase', () => {
     expect(user.id).toBeDefined()
   })
 
-  it('debería manejar correctamente el registro de múltiples usuarios', async () => {
+  it('deberia manejar correctamente el registro de múltiples usuarios', async () => {
     const repository = new InMemoryUserRepository()
     const hashService = new FakeHashService()
     await registerUserUseCase({
@@ -69,7 +69,7 @@ describe('RegisterUserUseCase', () => {
     expect(user2?.email).toBe('user2@example.com')
   })
 
-  it('debería asignar el rol por defecto si no se especifica', async () => {
+  it('deberia asignar el rol por defecto si no se especifica', async () => {
     const repository = new InMemoryUserRepository()
     const hashService = new FakeHashService()
     const user = await registerUserUseCase({
@@ -110,7 +110,7 @@ describe('RegisterUserUseCase', () => {
     .rejects.toThrow('Email inválido')
   })
 
-  it('lanza un error si el nombre está vacío', async () => {
+  it('lanza un error si el nombre está vacio', async () => {
     const repository = new InMemoryUserRepository()
     const hashService = new FakeHashService()
     await expect(
@@ -119,7 +119,7 @@ describe('RegisterUserUseCase', () => {
         email: 'KU8qM@example.com',
         password: 'password123'
       }, repository, hashService)
-    ).rejects.toThrow('El nombre no puede estar vacío')
+    ).rejects.toThrow('El nombre no puede estar vacio')
   })
 
   it('lanza un error si la contraseña es demasiado corta', async () => {
@@ -143,7 +143,7 @@ describe('RegisterUserUseCase', () => {
         email: 'KU8qM@example.com',
         password: 'password123'
       }, repository, hashService)
-    ).rejects.toThrow('El nombre no puede estar vacío')
+    ).rejects.toThrow('El nombre no puede estar vacio')
   })
   
 })

@@ -21,7 +21,7 @@ describe('ApproveReturnLoanUseCase', () => {
 
   // Correcto funcionamiento ✅
 
-  it("marca el préstamo como devuelto y reduce borrowedCopies del libro", async () => {
+  it("marca el prestamo como devuelto y reduce borrowedCopies del libro", async () => {
     const loan = { id: 'loan-id', bookId: 'book-id', returned: false };
     const book = { id: 'book-id', borrowedCopies: 1 };
     const loanRepo = {
@@ -34,6 +34,7 @@ describe('ApproveReturnLoanUseCase', () => {
     };
     const bookRepo = {
       findById: vi.fn().mockResolvedValue(book),
+      findByTitleAndAuthor: vi.fn(),
       findAll: vi.fn(),
       save: vi.fn(),
       delete: vi.fn(),
@@ -66,14 +67,14 @@ describe('ApproveReturnLoanUseCase', () => {
 
   // Errores esperados ❌
 
-  it('lanza error si el préstamo no existe', async () => {
+  it('lanza error si el prestamo no existe', async () => {
     loanRepository.findById.mockResolvedValue(null);
     await expect(approveReturnLoanUseCase({ loanId: 'loan-id' }, loanRepository, bookRepository))
       .rejects
-      .toThrow('Préstamo no encontrado');
+      .toThrow('Prestamo no encontrado');
   });
 
-  it('lanza error si el préstamo ya fue devuelto', async () => {
+  it('lanza error si el prestamo ya fue devuelto', async () => {
     const book = createBook('book-id', 'Title', 'Author', 3);
     book.borrowedCopies = 1;
     bookRepository.findById.mockResolvedValue(book);
@@ -88,7 +89,7 @@ describe('ApproveReturnLoanUseCase', () => {
     markLoanAsReturned(loan); // Simulamos que ya fue devuelto
     await expect(approveReturnLoanUseCase({ loanId: 'loan-id' }, loanRepository, bookRepository))
       .rejects
-      .toThrow('La solicitud de devolución ya fue aprobada');
+      .toThrow('La solicitud de devolucion ya fue aprobada');
   });
 
   it('lanza error si el libro no existe', async () => {

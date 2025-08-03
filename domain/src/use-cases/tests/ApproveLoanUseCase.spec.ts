@@ -24,7 +24,7 @@ describe('ApproveLoanUseCase', () => {
 
   // Correcto funcionamiento ✅
 
-  it('debería aprobar un préstamo modificando el stock del libro', async () => {
+  it('deberia aprobar un prestamo modificando el stock del libro', async () => {
     const loanId = 'loan123';
     const bookId = 'book123';
     const book = createBook(bookId, 'Libro de prueba', 'chincho poroto', 5);
@@ -49,7 +49,7 @@ describe('ApproveLoanUseCase', () => {
 
   // Errores esperados ❌
 
-  it('debería lanzar un error si el préstamo ya está aprobado', async () => {
+  it('deberia lanzar un error si el prestamo ya está aprobado', async () => {
     const loanId = 'loan123';
     const bookId = 'book123';
     const book = createBook(bookId, 'Libro de prueba', 'chincho poroto', 5);
@@ -64,10 +64,10 @@ describe('ApproveLoanUseCase', () => {
     loanRepository.findById = vi.fn().mockResolvedValue(loan);
     bookRepository.findById = vi.fn().mockResolvedValue(book);
     await expect(approveLoanUseCase({ loanId }, loanRepository, bookRepository))
-      .rejects.toThrow('El préstamo ya fue aprobado');
+      .rejects.toThrow('El prestamo ya fue aprobado');
   });
 
-  it('debería lanzar un error si el libro no existe', async () => {
+  it('deberia lanzar un error si el libro no existe', async () => {
     const loanId = 'loan123';
     const loan = createLoan({
       id: loanId, 
@@ -82,7 +82,7 @@ describe('ApproveLoanUseCase', () => {
       .rejects.toThrow('Libro no encontrado');
   });
 
-  it('debería lanzar un error si no hay copias disponibles para aprobar el préstamo', async () => {
+  it('deberia lanzar un error si no hay copias disponibles para aprobar el prestamo', async () => {
     const loanId = 'loan123';
     const bookId = 'book123';
     const book = createBook(bookId, 'Libro de prueba', 'chincho poroto', 0);
@@ -96,17 +96,17 @@ describe('ApproveLoanUseCase', () => {
     loanRepository.findById = vi.fn().mockResolvedValue(loan);
     bookRepository.findById = vi.fn().mockResolvedValue(book);
     await expect(approveLoanUseCase({ loanId }, loanRepository, bookRepository))
-      .rejects.toThrow('No hay copias disponibles para aprobar el préstamo');
+      .rejects.toThrow('No hay copias disponibles para aprobar el prestamo');
   });
 
-  it('debería lanzar un error si el préstamo no existe', async () => {
+  it('deberia lanzar un error si el prestamo no existe', async () => {
     const loanId = 'loan123';
     loanRepository.findById = vi.fn().mockResolvedValue(null);
     await expect(approveLoanUseCase({ loanId }, loanRepository, bookRepository))
-      .rejects.toThrow('Préstamo no encontrado');
+      .rejects.toThrow('Prestamo no encontrado');
   });
 
-  it('debería lanzar un error si el libro no existe al aprobar un préstamo', async () => {
+  it('deberia lanzar un error si el libro no existe al aprobar un prestamo', async () => {
     const loanId = 'loan123';
     const loan = createLoan({
       id: loanId,

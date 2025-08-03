@@ -64,7 +64,7 @@ describe('registerUserController', () => {
     expect(res.body).toEqual({ error: 'Email inválido' })
   })
 
-  it('retorna error si el nombre está vacío', async () => {
+  it('retorna error si el nombre está vacio', async () => {
     const res = await request(app)
       .post('/register')
       .send({
@@ -73,7 +73,7 @@ describe('registerUserController', () => {
         password: '123456'
       })
     expect(res.status).toBe(400)
-    expect(res.body).toEqual({ error: 'El nombre no puede estar vacío' })
+    expect(res.body).toEqual({ error: 'El nombre no puede estar vacio' })
   })
 
   it('retorna error si la contraseña es muy corta', async () => {

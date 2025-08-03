@@ -30,12 +30,12 @@ describe('approveLoanController', () => {
     await loanRepo.create(loan)
   })
 
-  it('aprueba préstamo con loanId válido', async () => {
+  it('aprueba prestamo con loanId válido', async () => {
     const res = await request(app)
       .post('/loans/approve')
       .send({ loanId: 'loan1' })
     expect(res.statusCode).toBe(200)
-    expect(res.body.message).toBe('Préstamo aprobado correctamente')
+    expect(res.body.message).toBe('Prestamo aprobado correctamente')
   })
 
   it('retorna error para loanId no encontrado', async () => {
@@ -43,17 +43,17 @@ describe('approveLoanController', () => {
       .post('/loans/approve')
       .send({ loanId: 'invalido' })
     expect(res.statusCode).toBe(400)
-    expect(res.body.error).toBe('Préstamo no encontrado')
+    expect(res.body.error).toBe('Prestamo no encontrado')
   })
 
-  it('retorna error si el préstamo ya fue aprobado', async () => {
+  it('retorna error si el prestamo ya fue aprobado', async () => {
     const loan = await loanRepo.findById('loan1')
     if (loan) approveLoan(loan)
     const res = await request(app)
       .post('/loans/approve')
       .send({ loanId: 'loan1' })
     expect(res.statusCode).toBe(400)
-    expect(res.body.error).toBe('El préstamo ya fue aprobado')
+    expect(res.body.error).toBe('El prestamo ya fue aprobado')
   })
 
 })

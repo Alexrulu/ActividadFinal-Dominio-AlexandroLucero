@@ -4,7 +4,7 @@ import { Loan } from "../../entities/Loan";
 import { LoanRepository } from "../../repositories/LoanRepository";
 
 describe("ReturnLoanUseCase", () => {
-  it("debería marcar la devolución como solicitada", async () => {
+  it("deberia marcar la devolucion como solicitada", async () => {
     const loan: Loan = {
       id: "loan1",
       userId: "user1",
@@ -28,7 +28,7 @@ describe("ReturnLoanUseCase", () => {
     expect(loanRepo.save).toHaveBeenCalledWith(loan);
   });
 
-  it("debería lanzar error si el préstamo no existe", async () => {
+  it("deberia lanzar error si el prestamo no existe", async () => {
     const loanRepo: LoanRepository = {
       findById: vi.fn().mockResolvedValue(null),
       save: vi.fn(),
@@ -37,10 +37,10 @@ describe("ReturnLoanUseCase", () => {
       create: vi.fn(),
       findActiveByUserAndBook: vi.fn()
     };
-    await expect(returnLoanUseCase("loan1", loanRepo)).rejects.toThrow("Préstamo no encontrado");
+    await expect(returnLoanUseCase("loan1", loanRepo)).rejects.toThrow("Prestamo no encontrado");
   });
 
-  it("debería lanzar error si el préstamo ya fue devuelto", async () => {
+  it("deberia lanzar error si el prestamo ya fue devuelto", async () => {
     const loan: Loan = {
       id: "loan1",
       userId: "user1",
@@ -59,10 +59,10 @@ describe("ReturnLoanUseCase", () => {
       create: vi.fn(),
       findActiveByUserAndBook: vi.fn()
     };
-    await expect(returnLoanUseCase("loan1", loanRepo)).rejects.toThrow("El préstamo ya fue devuelto");
+    await expect(returnLoanUseCase("loan1", loanRepo)).rejects.toThrow("El prestamo ya fue devuelto");
   });
 
-  it("debería lanzar error si ya se solicitó la devolución", async () => {
+  it("deberia lanzar error si ya se solicito la devolucion", async () => {
     const loan: Loan = {
       id: "loan1",
       userId: "user1",
@@ -83,6 +83,6 @@ describe("ReturnLoanUseCase", () => {
       findActiveByUserAndBook: vi.fn()
     };
 
-    await expect(returnLoanUseCase("loan1", loanRepo)).rejects.toThrow("La devolución ya fue solicitada");
+    await expect(returnLoanUseCase("loan1", loanRepo)).rejects.toThrow("La devolucion ya fue solicitada");
   });
 });

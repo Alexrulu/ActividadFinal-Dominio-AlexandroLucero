@@ -39,7 +39,7 @@ describe('ListLoansUseCase', () => {
     }
   })
 
-  it('debería retornar todos los préstamos si el requester es admin', async () => {
+  it('deberia retornar todos los prestamos si el requester es admin', async () => {
     (loanRepositoryMock.findAll as any).mockResolvedValue([loan1, loan2, loan3])
     const result = await listLoansUseCase({
       requesterId: 'admin-id',
@@ -50,7 +50,7 @@ describe('ListLoansUseCase', () => {
     expect(loanRepositoryMock.findByUserId).not.toHaveBeenCalled()
   })
 
-  it('debería retornar solo los préstamos del usuario si el requester es user', async () => {
+  it('deberia retornar solo los prestamos del usuario si el requester es user', async () => {
     (loanRepositoryMock.findByUserId as any).mockResolvedValue([loan1])
     const result = await listLoansUseCase({
       requesterId: 'user-1',
@@ -61,7 +61,7 @@ describe('ListLoansUseCase', () => {
     expect(loanRepositoryMock.findAll).not.toHaveBeenCalled()
   })
 
-  it('debería manejar el caso cuando no hay préstamos', async () => {
+  it('deberia manejar el caso cuando no hay prestamos', async () => {
     (loanRepositoryMock.findAll as any).mockResolvedValue([])
     const result = await listLoansUseCase({
       requesterId: 'admin-id',

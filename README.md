@@ -2,7 +2,7 @@
 
 Aplicación desarrollada con Clean Architecture + TDD
 
-## 🔧 Tecnologías
+## 🔧 Tecnologias
 - Node.js
 - TypeScript
 - Express
@@ -33,7 +33,7 @@ Aplicación desarrollada con Clean Architecture + TDD
 
 ## 📦 Instalación
 ```bash
-# Instala las dependencias del proyecto raíz (Supertest, TypeScript, Vitest)
+# Instala las dependencias del proyecto raiz (Supertest, TypeScript, Vitest)
 npm install
 
 # Ejecuta todas las pruebas unitarias
