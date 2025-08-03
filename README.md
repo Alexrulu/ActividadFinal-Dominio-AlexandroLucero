@@ -45,5 +45,5 @@ cd apps/backend
 # Instala las dependencias del servidor (Express, Bcrypt, JWT, etc.)
 npm install
 
-# Inicia el servidor de desarrollo en modo de "observación"
+# Inicia el servidor de desarrollo
 npm run dev
