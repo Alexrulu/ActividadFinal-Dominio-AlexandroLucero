@@ -4,6 +4,9 @@ import { Loan } from "../../entities/Loan";
 import { LoanRepository } from "../../repositories/LoanRepository";
 
 describe("ReturnLoanUseCase", () => {
+
+  // Casos exitosos ✅
+  
   it("deberia marcar la devolucion como solicitada", async () => {
     const loan: Loan = {
       id: "loan1",
@@ -27,6 +30,8 @@ describe("ReturnLoanUseCase", () => {
     expect(loan.returnRequested).toBe(true);
     expect(loanRepo.save).toHaveBeenCalledWith(loan);
   });
+
+  // Casos fallidos ❌
 
   it("deberia lanzar error si el prestamo no existe", async () => {
     const loanRepo: LoanRepository = {
@@ -73,7 +78,6 @@ describe("ReturnLoanUseCase", () => {
       approved: true,
       returnRequested: true
     };
-
     const loanRepo: LoanRepository = {
       findById: vi.fn().mockResolvedValue(loan),
       save: vi.fn(),
@@ -82,7 +86,7 @@ describe("ReturnLoanUseCase", () => {
       create: vi.fn(),
       findActiveByUserAndBook: vi.fn()
     };
-
     await expect(returnLoanUseCase("loan1", loanRepo)).rejects.toThrow("La devolucion ya fue solicitada");
   });
+
 });

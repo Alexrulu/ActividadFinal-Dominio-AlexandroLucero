@@ -13,7 +13,6 @@ export async function listLoansUseCase(
   const { requesterId, requesterRole } = request;
 
   let loans
-
   if (requesterRole === 'admin') {
     loans = await loanRepo.findAll();
   } else {

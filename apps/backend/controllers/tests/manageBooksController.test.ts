@@ -17,7 +17,9 @@ describe("manageBooksController", () => {
     bookRepo.clear();
   });
 
-  it("should create a book", async () => {
+  // Casos exitosos ✅
+
+  it("Deberia crear un libro", async () => {
     const res = await request(app)
       .post("/books/manage/add")
       .send({ title: "el quijote", author: "cervantes", totalCopies: 5 });
@@ -29,17 +31,7 @@ describe("manageBooksController", () => {
     expect(res.body.totalCopies).toBe(5);
   });
 
-  it("should return error message if book already exists", async () => {
-    const book = createBook("book1", "el quijote", "cervantes", 5);
-    await bookRepo.save(book);
-    const res = await request(app)
-      .post("/books/manage/add")
-      .send({ title: "el quijote", author: "cervantes", totalCopies: 5 });
-    expect(res.statusCode).toBe(400);
-    expect(res.body.error).toBe("El libro ya existe");
-  });
-
-  it("should update a book", async () => {
+  it("Deberia actualizar un libro", async () => {
     const book = createBook("book1", "el quijote", "cervantes", 5);
     await bookRepo.save(book);
     const res = await request(app)
@@ -53,7 +45,7 @@ describe("manageBooksController", () => {
     expect(res.body.totalCopies).toBe(10);
   });
 
-  it("should delete a book", async () => {
+  it("Elimina un libro", async () => {
     const book = createBook("book1", "el quijote", "cervantes", 5);
     await bookRepo.save(book);
     const res = await request(app)
@@ -61,5 +53,17 @@ describe("manageBooksController", () => {
       .send({ id: "book1" });
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBe("Libro eliminado correctamente");
+  });
+
+  // Casos fallidos ❌
+
+  it("Devuelve error si el libro ya existe", async () => {
+    const book = createBook("book1", "el quijote", "cervantes", 5);
+    await bookRepo.save(book);
+    const res = await request(app)
+      .post("/books/manage/add")
+      .send({ title: "el quijote", author: "cervantes", totalCopies: 5 });
+    expect(res.statusCode).toBe(400);
+    expect(res.body.error).toBe("El libro ya existe");
   });
 });

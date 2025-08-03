@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { listLoansUseCase } from '../ListLoansUseCase'
 import { createLoan } from '../../entities/Loan'
 
-// Datos de prueba
 const loan1 = createLoan({
   id: '1', 
   userId: 'user-1', 
@@ -39,6 +38,8 @@ describe('ListLoansUseCase', () => {
     }
   })
 
+  // Casos exitosos ✅
+
   it('deberia retornar todos los prestamos si el requester es admin', async () => {
     (loanRepositoryMock.findAll as any).mockResolvedValue([loan1, loan2, loan3])
     const result = await listLoansUseCase({
@@ -69,4 +70,5 @@ describe('ListLoansUseCase', () => {
     }, loanRepositoryMock)
     expect(result).toEqual([])
   })
+  
 })

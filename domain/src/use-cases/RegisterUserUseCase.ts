@@ -47,8 +47,7 @@ export async function registerUserUseCase(
     passwordHash,
     input.role ?? 'user'
   )
-
+  
   await userRepository.save(user)
-
   return user
 }

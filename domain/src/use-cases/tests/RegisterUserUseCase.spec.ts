@@ -4,15 +4,12 @@ import { User } from '../../entities/User'
 
 class InMemoryUserRepository {
   private users: User[] = []
-
   async findByEmail(email: string): Promise<User | null> {
     return this.users.find(u => u.email === email) || null
   }
-
   async save(user: User): Promise<void> {
     this.users.push(user)
   }
-
   async findById(id: string): Promise<User | null> {
     return this.users.find(u => u.id === id) || null
   }
@@ -29,7 +26,7 @@ class FakeHashService {
 
 describe('RegisterUserUseCase', () => {
 
-  // Correcto funcionamiento ✅
+  // Casos exitosos ✅
 
   it('deberia registrar el usuario si el email no está en uso', async () => {
     const repository = new InMemoryUserRepository()
@@ -84,7 +81,7 @@ describe('RegisterUserUseCase', () => {
     expect(user.role).toBe('user')
   })
 
-  // Errores esperados ❌
+  // Casos fallidos ❌
 
   it('lanza un error si el email ya está en uso', async () => {
     const repository = new InMemoryUserRepository()

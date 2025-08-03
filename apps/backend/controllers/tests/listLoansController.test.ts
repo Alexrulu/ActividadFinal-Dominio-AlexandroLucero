@@ -39,7 +39,9 @@ describe("listLoansController", () => {
     loanRepo.clear();
   });
 
-  it("should list all loans if requester is admin", async () => {
+  // Casos exitosos ✅
+
+  it("Devuelve todos los prestamos si el requester es admin", async () => {
     const res = await request(app)
     .post("/loans/list")
     .send({ requesterId: "user2", requesterRole: "admin" });
@@ -64,7 +66,7 @@ describe("listLoansController", () => {
     expect(res.body.loans[1].approved).toBe(true);
   });
 
-  it("should list all loans if requester is user", async () => {
+  it("Devuelve el prestamo del usuario si el requester es user", async () => {
     const res = await request(app)
     .post("/loans/list")
     .send({ requesterId: "user1", requesterRole: "user" });
@@ -81,7 +83,9 @@ describe("listLoansController", () => {
     expect(res.body.loans[0].approved).toBe(true);
   });
 
-  it("should return error if requester user have no loans", async () => {
+  // Casos fallidos ❌
+  
+  it("Devuelve error si no se encontro un prestamo del usuario", async () => {
     const res = await request(app)
     .post("/loans/list")
     .send({ requesterId: "user3", requesterRole: "user" });
@@ -89,7 +93,7 @@ describe("listLoansController", () => {
     expect(res.body.error).toBe("No se encontraron prestamos");
   });
 
-  it("should return error if no requesterId is provided", async () => {
+  it("Devuelve error si no se pasa requesterId", async () => {
     const res = await request(app)
     .post("/loans/list")
     .send({ requesterRole: "user" });
@@ -97,7 +101,7 @@ describe("listLoansController", () => {
     expect(res.body.error).toBe("Falta el ID del usuario");
   });
 
-  it("should return error if no requesterRole is provided", async () => {
+  it("Devuelve error si no se pasa requesterRole", async () => {
     const res = await request(app)
     .post("/loans/list")
     .send({ requesterId: "user1" });

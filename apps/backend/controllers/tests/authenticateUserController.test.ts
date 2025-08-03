@@ -25,6 +25,8 @@ describe('authenticateUserController', () => {
     vi.clearAllMocks();
   });
 
+  // Casos exitosos ✅
+
   it('deberia autenticar usuario correctamente y devolver token', async () => {
     (userRepo.findByEmail as any).mockResolvedValue({
       id: 'user1',
@@ -44,6 +46,8 @@ describe('authenticateUserController', () => {
     expect(hashService.compare).toHaveBeenCalledWith('password123', 'hashed_password');
     expect(tokenGenerator.generate).toHaveBeenCalledWith({ userId: 'user1' });
   });
+
+  // Casos fallidos ❌
 
   it('deberia devolver error si usuario no existe', async () => {
     (userRepo.findByEmail as any).mockResolvedValue(null);

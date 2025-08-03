@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { createBook } from "../../entities/Book";
-
 import { addBookUseCase, updateBookUseCase, deleteBookUseCase } from "../ManageBooksUseCase";
 
 describe("ManageBooksUseCase", () => {
@@ -16,7 +15,7 @@ describe("ManageBooksUseCase", () => {
   });
 
   describe("addBook", () => {
-    it("deberia crear un libro nuevo si no existe", async () => {
+    it("deberia crear un libro nuevo si no existe", async () => { // ✅
       bookRepositoryMock.findByTitleAndAuthor.mockResolvedValue(null);
       await addBookUseCase(
         {
@@ -37,7 +36,7 @@ describe("ManageBooksUseCase", () => {
       );
     });
 
-    it("deberia lanzar error si el libro ya existe", async () => {
+    it("deberia lanzar error si el libro ya existe", async () => { // ❌
       bookRepositoryMock.findByTitleAndAuthor.mockResolvedValue(createBook("book1", "existente", "autor", 5));
       await expect(
         addBookUseCase(
@@ -53,7 +52,7 @@ describe("ManageBooksUseCase", () => {
   });
 
   describe("updateBook", () => {
-    it("deberia actualizar los campos del libro", async () => {
+    it("deberia actualizar los campos del libro", async () => { // ✅
       const book = createBook("book1", "antiguo", "autor antiguo", 5);
       book.borrowedCopies = 2;
       bookRepositoryMock.findById.mockResolvedValue(book);
@@ -70,7 +69,7 @@ describe("ManageBooksUseCase", () => {
       expect(bookRepositoryMock.save).toHaveBeenCalledWith(book);
     });
 
-    it("deberia lanzar error si no encuentra el libro", async () => {
+    it("deberia lanzar error si no encuentra el libro", async () => { // ❌
       bookRepositoryMock.findById.mockResolvedValue(null);
       await expect(
         updateBookUseCase(
@@ -83,7 +82,7 @@ describe("ManageBooksUseCase", () => {
       ).rejects.toThrow("Libro no encontrado");
     });
 
-    it("deberia lanzar error si totalCopies es menor a borrowedCopies", async () => {
+    it("deberia lanzar error si totalCopies es menor a borrowedCopies", async () => { // ❌
       const book = createBook("book1", "Libro", "Autor", 5);
       book.borrowedCopies = 3;
       bookRepositoryMock.findById.mockResolvedValue(book);
@@ -100,7 +99,7 @@ describe("ManageBooksUseCase", () => {
   });
 
   describe("deleteBook", () => {
-    it("deberia eliminar el libro si no hay copias prestadas", async () => {
+    it("deberia eliminar el libro si no hay copias prestadas", async () => { // ✅
       const book = createBook("book1", "Libro", "Autor", 5);
       book.borrowedCopies = 0;
       bookRepositoryMock.findById.mockResolvedValue(book);
@@ -108,14 +107,14 @@ describe("ManageBooksUseCase", () => {
       expect(bookRepositoryMock.delete).toHaveBeenCalledWith("book1");
     });
 
-    it("deberia lanzar error si no encuentra el libro", async () => {
+    it("deberia lanzar error si no encuentra el libro", async () => { // ❌
       bookRepositoryMock.findById.mockResolvedValue(null);
       await expect(deleteBookUseCase({ id: "book1" }, bookRepositoryMock)).rejects.toThrow(
         "Libro no encontrado"
       );
     });
 
-    it("deberia lanzar error si hay copias prestadas", async () => {
+    it("deberia lanzar error si hay copias prestadas", async () => { // ❌
       const book = createBook("book1", "Libro", "Autor", 5);
       book.borrowedCopies = 1;
       bookRepositoryMock.findById.mockResolvedValue(book);

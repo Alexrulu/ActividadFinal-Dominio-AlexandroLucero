@@ -24,6 +24,8 @@ describe('returnLoanController', () => {
     await loanRepo.create(loan)
   })
 
+  // Casos exitosos ✅
+
   it('solicita devolucion correctamente', async () => {
     const res = await request(app)
       .post('/loans/return')
@@ -33,6 +35,8 @@ describe('returnLoanController', () => {
     const loan = await loanRepo.findById('loan1')
     expect(loan?.returnRequested).toBe(true)
   })
+
+  // Casos fallidos ❌
 
   it('falla si no se pasa loanId', async () => {
     const res = await request(app)

@@ -1,3 +1,6 @@
+import { TokenGenerator } from '../services/TokenGenerator';
+import { HashService } from '../services/HashService';
+
 export interface AuthenticateUserInput {
   email: string;
   password: string;
@@ -12,18 +15,10 @@ export interface UserRepository {
   findByEmail: (email: string) => Promise<{ id: string; passwordHash: string } | null>;
 }
 
-export interface Hasher {
-  compare: (plain: string, hash: string) => Promise<boolean>;
-}
-
-export interface TokenGenerator {
-  generate: (payload: any) => string;
-}
-
 export async function authenticateUserUseCase(
   input: AuthenticateUserInput,
   userRepository: UserRepository,
-  hasher: Hasher,
+  hasher: HashService,
   tokenGenerator: TokenGenerator
 ): Promise<AuthenticateUserOutput> {
   const user = await userRepository.findByEmail(input.email);
@@ -34,8 +29,5 @@ export async function authenticateUserUseCase(
 
   const token = tokenGenerator.generate({ userId: user.id });
 
-  return {
-    token,
-    userId: user.id,
-  };
+  return { token, userId: user.id };
 }

@@ -11,7 +11,6 @@ export async function listBooksUseCase(
   bookRepo: BookRepository
 ): Promise<Book[]> {
   const books = await bookRepo.findAll(params);
-
   if (!books || books.length === 0) {
     throw new Error("No se encontraron libros");
   }

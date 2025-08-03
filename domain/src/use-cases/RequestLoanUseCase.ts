@@ -28,8 +28,8 @@ export async function requestLoanUseCase(
   }
 
   const existingLoan = await loanRepo.findActiveByUserAndBook(userId, bookId);
-  const book = await bookRepo.findById(bookId);
 
+  const book = await bookRepo.findById(bookId);
   if (!book) {
     throw new Error("Libro no encontrado");
   }
@@ -45,7 +45,6 @@ export async function requestLoanUseCase(
   const now = new Date();
   const returnDate = new Date(now);
   returnDate.setDate(returnDate.getDate() + durationInMonths * 28);
-
 
   const loan = createLoan({
     id: randomUUID(),

@@ -30,6 +30,8 @@ describe('approveReturnLoanController', () => {
     await loanRepo.create(loan)
   })
 
+  // Casos exitosos ✅
+
   it('marca prestamo como devuelto correctamente', async () => {
     const res = await request(app)
       .post('/loans/return')
@@ -42,6 +44,8 @@ describe('approveReturnLoanController', () => {
     expect(updatedBook?.borrowedCopies).toBe(0)
   })
 
+  // Casos fallidos ❌
+  
   it('lanza error si el prestamo no existe', async () => {
     const res = await request(app)
       .post('/loans/return')

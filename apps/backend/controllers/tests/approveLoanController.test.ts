@@ -14,7 +14,6 @@ describe('approveLoanController', () => {
     app.use(express.json())
     app.post('/loans/approve', (req, res) => approveLoanController(req, res))
 
-    // Limpiamos el estado compartido
     loanRepo.clear()
     bookRepo.clear()
 
@@ -30,6 +29,8 @@ describe('approveLoanController', () => {
     await loanRepo.create(loan)
   })
 
+  // Casos exitosos ✅
+
   it('aprueba prestamo con loanId válido', async () => {
     const res = await request(app)
       .post('/loans/approve')
@@ -37,6 +38,8 @@ describe('approveLoanController', () => {
     expect(res.statusCode).toBe(200)
     expect(res.body.message).toBe('Prestamo aprobado correctamente')
   })
+
+  // Casos fallidos ❌
 
   it('retorna error para loanId no encontrado', async () => {
     const res = await request(app)

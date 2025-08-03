@@ -41,6 +41,8 @@ describe("requestLoanUseCase", () => {
     };
   });
 
+  // Casos exitosos ✅
+
   it("deberia registrar un prestamo correctamente", async () => {
     const book = buildBook();
     bookRepo.findById.mockResolvedValue(book);
@@ -52,7 +54,9 @@ describe("requestLoanUseCase", () => {
     expect(loanRepo.create).toHaveBeenCalledOnce();
   });
 
-  it("deberia lanzar error si duracion es inválida", async () => {
+  // Casos fallidos ❌
+
+  it("deberia lanzar error si la duracion de meses es mayor a 2", async () => {
     await expect(() =>
       requestLoanUseCase(
         { userId: "user-1", bookId: "book-123", durationInMonths: 3 },

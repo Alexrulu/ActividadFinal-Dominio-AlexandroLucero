@@ -21,6 +21,8 @@ describe('AuthenticateUserUseCase', () => {
 
   const credentials = { email: 'john@example.com', password: '123456' };
 
+  // Casos exitosos ✅
+
   it('autentica y devuelve un token si las credenciales son correctas', async () => {
     const user = createUser('user-id', 'John', 'john@example.com', 'hashed-password');
     userRepository.findByEmail.mockResolvedValue(user);
@@ -29,6 +31,8 @@ describe('AuthenticateUserUseCase', () => {
     const result = await authenticateUserUseCase(credentials, userRepository, hasher, tokenGenerator);
     expect(result).toEqual({ token: 'token123' , userId: 'user-id' });
   });
+
+  // Casos fallidos ❌
 
   it('lanza error si el usuario no existe', async () => {
     userRepository.findByEmail.mockResolvedValue(null);

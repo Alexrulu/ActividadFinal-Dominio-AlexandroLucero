@@ -27,7 +27,7 @@ describe("RequestLoanUseCase", () => {
     };
   });
 
-  // Success cases ✅
+  // Casos exitosos ✅
 
   it("deberia crear un prestamo sin modificar el stock", async () => {
     const book = createBook("libro-1", "El principito", "Antoine de Saint-Exupéry", 5);
@@ -84,7 +84,7 @@ describe("RequestLoanUseCase", () => {
     expect(createdLoan.to.toISOString()).toBe(expectedTo.toISOString());
   });
 
-  // Failure cases ❌
+  // Casos fallidos ❌
 
   it("deberia lanzar un error si la duracion del prestamo es mayor a 2 meses", async () => {
     await expect(requestLoanUseCase({ userId: "usuario-1", bookId: "libro-1", durationInMonths: 3 }, 

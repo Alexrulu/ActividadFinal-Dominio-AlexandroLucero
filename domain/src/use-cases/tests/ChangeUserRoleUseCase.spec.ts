@@ -16,7 +16,7 @@ describe('ChangeUserRoleUseCase', () => {
     };
   });
 
-  // Correcto funcionamiento ✅
+  // Casos exitosos ✅
 
   it('deberia cambiar el rol si el solicitante es admin', async () => {
     (userRepository.findById as any)
@@ -31,7 +31,7 @@ describe('ChangeUserRoleUseCase', () => {
     expect(userRepository.save).toHaveBeenCalledWith(normalUser);
   });
 
-  // Errores esperados ❌
+  // Casos fallidos ❌
 
   it('deberia lanzar error si el solicitante no existe', async () => {
     (userRepository.findById as any).mockResolvedValueOnce(null);

@@ -16,7 +16,7 @@ export async function changeUserRoleUseCase(
 
   const targetUser = await userRepository.findById(targetUserId)
   if (!targetUser) throw new Error('Usuario no encontrado')
-
   targetUser.role = newRole
+
   await userRepository.save(targetUser)
 }

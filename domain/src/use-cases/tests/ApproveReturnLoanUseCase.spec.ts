@@ -19,7 +19,7 @@ describe('ApproveReturnLoanUseCase', () => {
     };
   });
 
-  // Correcto funcionamiento ✅
+  // Casos exitosos ✅
 
   it("marca el prestamo como devuelto y reduce borrowedCopies del libro", async () => {
     const loan = { id: 'loan-id', bookId: 'book-id', returned: false };
@@ -65,7 +65,7 @@ describe('ApproveReturnLoanUseCase', () => {
     }));
   });
 
-  // Errores esperados ❌
+  // Casos fallidos ❌
 
   it('lanza error si el prestamo no existe', async () => {
     loanRepository.findById.mockResolvedValue(null);

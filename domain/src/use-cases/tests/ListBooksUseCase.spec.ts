@@ -9,7 +9,7 @@ const book2 = createBook("2", "Fahrenheit 451", "Ray Bradbury", 2);
 book2.borrowedCopies = 0;
 const books = [book1, book2];
 
-// Correcto funcionamiento ✅
+// Casos exitosos ✅
 
 it("deberia retornar todos los libros del repositorio", async () => {
   const mockRepo: BookRepository = {
@@ -53,7 +53,7 @@ it("deberia mostrar un solo libro si hay más de uno pero está limitado a 1", a
   expect(result[0]).toEqual(books[0]);
 });
 
-// Errores esperados ❌
+// Casos fallidos ❌
 
 it("deberia lanzar un error si el repositorio falla", async () => {
   const mockRepo: BookRepository = {

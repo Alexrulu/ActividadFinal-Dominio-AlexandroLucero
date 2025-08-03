@@ -19,7 +19,9 @@ describe("changeUserRoleController", () => {
     userRepo.save(user);
   });
 
-  it("should change user role", async () => {
+  // Casos exitosos ✅
+
+  it("Deberia cambiar el rol de usuario", async () => {
     const res = await request(app)
       .post("/users/changeRole")
       .send({
@@ -39,7 +41,9 @@ describe("changeUserRoleController", () => {
     expect(updatedUser?.role).toBe("admin");
   });
 
-  it("should return error if user is not admin", async () => {
+  // Casos fallidos ❌
+  
+  it("Deberia devolver error si el usuario no es admin", async () => {
     const res = await request(app)
       .post("/users/changeRole")
       .send({
@@ -52,7 +56,7 @@ describe("changeUserRoleController", () => {
     .toEqual({ error: "Solo los administradores pueden cambiar roles" });
   });
 
-  it("should return error if user does not exist", async () => {
+  it("Deberia devolver error si el usuario no existe", async () => {
     const res = await request(app)
       .post("/users/changeRole")
       .send({
@@ -65,7 +69,7 @@ describe("changeUserRoleController", () => {
     .toEqual({ error: "Usuario no encontrado" });
   });
 
-  it("should return error if admin does not exist", async () => {
+  it("Deberia devolver error si el administrador no existe", async () => {
     const res = await request(app)
       .post("/users/changeRole")
       .send({
@@ -78,7 +82,7 @@ describe("changeUserRoleController", () => {
     .toEqual({ error: "Usuario administrador no encontrado" });
   });
 
-  it("should return error if role is not provided", async () => {
+  it("Deberia devolver error si no se pasa newRole", async () => {
     const res = await request(app)
       .post("/users/changeRole")
       .send({

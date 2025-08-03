@@ -11,8 +11,10 @@ describe('registerUserController', () => {
     app = express()
     app.use(express.json())
     app.post('/register', (req, res) => registerUserController(req, res))
-    userRepo.clear() // Limpiar usuarios antes de cada test
+    userRepo.clear()
   })
+
+  // Casos exitosos ✅
 
   it('registra un usuario correctamente', async () => {
     const res = await request(app)
@@ -35,6 +37,8 @@ describe('registerUserController', () => {
     expect(res.body).not.toHaveProperty('passwordHash')
   })
 
+  // Casos fallidos ❌
+  
   it('retorna error si el email ya está en uso', async () => {
     await request(app).post('/register').send({
       name: 'Alex',

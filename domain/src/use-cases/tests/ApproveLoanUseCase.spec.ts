@@ -14,15 +14,13 @@ describe('ApproveLoanUseCase', () => {
       findById: vi.fn(),
       save: vi.fn(),
     }
-
     bookRepository = {
       findById: vi.fn(),
       save: vi.fn(),
     }
-
   });
 
-  // Correcto funcionamiento ✅
+  // Casos exitosos ✅
 
   it('deberia aprobar un prestamo modificando el stock del libro', async () => {
     const loanId = 'loan123';
@@ -47,7 +45,7 @@ describe('ApproveLoanUseCase', () => {
     expect(hasAvailableCopies(savedBook)).toBe(true);
   });
 
-  // Errores esperados ❌
+  // Casos fallidos ❌
 
   it('deberia lanzar un error si el prestamo ya está aprobado', async () => {
     const loanId = 'loan123';

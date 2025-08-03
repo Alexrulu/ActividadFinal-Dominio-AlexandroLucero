@@ -1,4 +1,3 @@
-import { Book } from "../entities/Book";
 import { createBook } from "../entities/Book";
 import { BookRepository } from "../repositories/BookRepository";
 import { randomUUID } from "crypto";
@@ -25,8 +24,8 @@ export async function addBookUseCase(
   bookRepo: BookRepository
 ): Promise<string> {
   const existing = await bookRepo.findByTitleAndAuthor((input.title).toLowerCase(), (input.author).toLowerCase());
-
   if (existing) throw new Error("El libro ya existe");
+
   if (input.totalCopies < 1) throw new Error("totalCopies debe ser mayor a 0");
 
   const id = randomUUID();
@@ -60,7 +59,6 @@ export async function deleteBookUseCase(
 ): Promise<void> {
   const book = await bookRepo.findById(input.id);
   if (!book) throw new Error("Libro no encontrado");
-
   if (book.borrowedCopies > 0) {
     throw new Error("No se puede eliminar un libro con copias prestadas");
   }

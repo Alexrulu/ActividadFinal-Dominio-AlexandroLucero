@@ -10,7 +10,6 @@ export async function approveLoanUseCase(
 ): Promise<void> {
   const loan = await loanRepo.findById(input.loanId);
   if (!loan) throw new Error("Prestamo no encontrado");
-
   if (loan.approved) throw new Error("El prestamo ya fue aprobado");
 
   const book = await bookRepo.findById(loan.bookId);

@@ -41,7 +41,9 @@ describe('listBooksController', () => {
     .send({ title: 'Book 1', author: 'Author 1', totalCopies: 10 })
   })
 
-  it('should list books', async () => {
+  // Casos exitosos ✅
+
+  it('Devuelve los libros', async () => {
     const res = await request(app).get('/books/list')
     expect(res.statusCode).toBe(200)
     expect(res.body.message).toBe('Libros obtenidos correctamente')
@@ -49,27 +51,29 @@ describe('listBooksController', () => {
     expect(res.body.books[0].title).toBe('book 1')
   })
 
-  it('should return the name of books', async () => {
+  it('Devuelve los titulos de los libros', async () => {
     const res = await request(app).get('/books/list')
     expect(res.body.books[0].title).toBe('book 1')
   })
 
-  it('should return the author of books', async () => {
+  it('Devuelve los autores de los libros', async () => {
     const res = await request(app).get('/books/list')
     expect(res.body.books[0].author).toBe('author 1')
   })
 
-  it('should return the total copies of books', async () => {
+  it('Devuelve el total de copias de un libro especifico', async () => {
     const res = await request(app).get('/books/list')
     expect(res.body.books[0].totalCopies).toBe(10)
   })
 
-  it('should return the amount of borrowed copies of books', async () => {
+  it('Devuelve el total de copias prestadas de un libro especifico', async () => {
     const res = await request(app).get('/books/list')
     expect(res.body.books[0].borrowedCopies).toBe(0)
   })
 
-  it('should return error message if there are no books', async () => {
+  // Casos fallidos ❌
+  
+  it('Lanza error si no se encuentran libros', async () => {
     bookRepo.clear()
     const res = await request(app).get('/books/list')
     expect(res.statusCode).toBe(404)
