@@ -2,8 +2,9 @@ import { Loan } from '../../../domain/src/entities/Loan'
 import { LoanRepository } from '../../../domain/src/repositories/LoanRepository'
 
 const db: Loan[] = [
+  // example coding for http testing
   // {
-  //   id: "123",
+  //   id: "loan1",
   //   userId: "user1",
   //   bookId: "book1",
   //   from: new Date(),

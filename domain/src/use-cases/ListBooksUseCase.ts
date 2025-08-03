@@ -1,7 +1,10 @@
-import { BookRepository } from "../repositories/BookRepository";
 import { Book } from "../entities/Book";
+import { BookRepository } from "../repositories/BookRepository";
 
-type PaginationParams = { page: number; limit: number };
+type PaginationParams = { 
+  page: number; 
+  limit: number 
+};
 
 export async function listBooksUseCase(
   params: PaginationParams,

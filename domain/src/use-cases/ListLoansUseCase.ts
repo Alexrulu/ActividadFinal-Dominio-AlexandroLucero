@@ -6,23 +6,19 @@ interface ListLoansRequest {
   requesterRole: 'admin' | 'user';
 }
 
-interface ListLoansResponse {
-  loans: Loan[];
-}
-
 export async function listLoansUseCase(
   request: ListLoansRequest,
-  loanRepository: LoanRepository
-): Promise<ListLoansResponse> {
+  loanRepo: LoanRepository
+): Promise<Loan[]> {
   const { requesterId, requesterRole } = request;
 
-  let loans: Loan[];
+  let loans
 
   if (requesterRole === 'admin') {
-    loans = await loanRepository.findAll();
+    loans = await loanRepo.findAll();
   } else {
-    loans = await loanRepository.findByUserId(requesterId);
+    loans = await loanRepo.findByUserId(requesterId);
   }
 
-  return { loans };
+  return loans;
 }

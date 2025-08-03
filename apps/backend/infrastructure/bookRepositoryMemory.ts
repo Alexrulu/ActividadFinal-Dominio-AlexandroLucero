@@ -6,8 +6,8 @@ export class BookRepositoryMemory implements BookRepository {
     // example coding for http testing
     // {
     //   id: "book1",
-    //   title: "Book 1",
-    //   author: "Author 1",
+    //   title: "book 1",
+    //   author: "author 1",
     //   totalCopies: 10,
     //   borrowedCopies: 0,
     // } 
