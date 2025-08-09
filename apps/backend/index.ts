@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 
 import requestLoanRoute from './routes/requestLoanRoute';
 import approveLoanRoute from './routes/approveLoanRoute';
@@ -14,7 +15,7 @@ import manageBooksRoute from './routes/manageBooksRoute';
 import listBooksRoute from './routes/listBooksRoute';
 
 const app = express();
-app.use(express.json());
+app.use(cors());
 
 app.use('/loans/request', requestLoanRoute);
 app.use('/loans/approve', approveLoanRoute);
@@ -33,6 +34,10 @@ app.get('/', (req, res) => {
   res.send('Funcionando');
 });
 
+app.use(cors({
+  origin: "http://localhost:5173"
+}));
+
 app.listen(3000, () => {
-  console.log('El servidor esta corriendo en el puerto 3000');
+  console.log('Servidor corriendo en el puerto 3000');
 });

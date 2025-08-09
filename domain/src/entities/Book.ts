@@ -4,6 +4,7 @@ export interface Book {
   author: string
   totalCopies: number
   borrowedCopies: number
+  thumbnail?: string
 }
 
 export function hasAvailableCopies(book: Book): boolean {
