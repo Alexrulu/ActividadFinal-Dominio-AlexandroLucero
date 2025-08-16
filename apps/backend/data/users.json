@@ -1,0 +1,16 @@
+[
+  {
+    "id": "admin1",
+    "name": "Admin",
+    "email": "admin@example.com",
+    "passwordHash": "$2b$10$iH9M/4CkBvSWr9.zBYZsP.RH0/ar/xlzC2SYEjD35.zUKUHPcwHPC",
+    "role": "admin"
+  },
+  {
+    "id": "user1",
+    "name": "User",
+    "email": "user@example.com",
+    "passwordHash": "$2b$10$om.0FDZ/qEtECD7F48UGleEksNUkA3Ms9uiO0G9eG8MJU47QkVlVe",
+    "role": "user"
+  }
+]

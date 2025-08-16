@@ -4,7 +4,6 @@ import express from 'express'
 import { approveLoanController } from '../approveLoanController'
 import { loanRepo, bookRepo } from '../repositories'
 import { approveLoan, createLoan } from '../../../../domain/src/entities/Loan'
-import { createBook } from '../../../../domain/src/entities/Book'
 
 describe('approveLoanController', () => {
   let app: express.Express
@@ -13,21 +12,19 @@ describe('approveLoanController', () => {
     app = express()
     app.use(express.json())
     app.post('/loans/approve', (req, res) => approveLoanController(req, res))
-
+  
     loanRepo.clear()
-    bookRepo.clear()
-
-    await bookRepo.save(createBook('book1', 'El Quijote', 'Cervantes', 5))
 
     const loan = createLoan({
       id: 'loan1',
       userId: 'user1',
-      bookId: 'book1',
+      bookId: 'OuW5dC2O99AC',
       from: new Date(),
       to: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     })
     await loanRepo.create(loan)
   })
+
 
   // Casos exitosos ✅
 

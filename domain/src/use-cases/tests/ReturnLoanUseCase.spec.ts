@@ -24,7 +24,9 @@ describe("ReturnLoanUseCase", () => {
       findAll: vi.fn(),
       findByUserId: vi.fn(),
       create: vi.fn(),
-      findActiveByUserAndBook: vi.fn()
+      findActiveByUserAndBook: vi.fn(),
+      findActiveByUser: vi.fn(),
+      delete: vi.fn()
     };
     await returnLoanUseCase("loan1", loanRepo);
     expect(loan.returnRequested).toBe(true);
@@ -40,7 +42,9 @@ describe("ReturnLoanUseCase", () => {
       findAll: vi.fn(),
       findByUserId: vi.fn(),
       create: vi.fn(),
-      findActiveByUserAndBook: vi.fn()
+      findActiveByUserAndBook: vi.fn(),
+      findActiveByUser: vi.fn(),
+      delete: vi.fn()
     };
     await expect(returnLoanUseCase("loan1", loanRepo)).rejects.toThrow("Prestamo no encontrado");
   });
@@ -62,7 +66,9 @@ describe("ReturnLoanUseCase", () => {
       findAll: vi.fn(),
       findByUserId: vi.fn(),
       create: vi.fn(),
-      findActiveByUserAndBook: vi.fn()
+      findActiveByUserAndBook: vi.fn(),
+      findActiveByUser: vi.fn(),
+      delete: vi.fn()
     };
     await expect(returnLoanUseCase("loan1", loanRepo)).rejects.toThrow("El prestamo ya fue devuelto");
   });
@@ -84,7 +90,9 @@ describe("ReturnLoanUseCase", () => {
       findAll: vi.fn(),
       findByUserId: vi.fn(),
       create: vi.fn(),
-      findActiveByUserAndBook: vi.fn()
+      findActiveByUserAndBook: vi.fn(),
+      findActiveByUser: vi.fn(),
+      delete: vi.fn()
     };
     await expect(returnLoanUseCase("loan1", loanRepo)).rejects.toThrow("La devolucion ya fue solicitada");
   });

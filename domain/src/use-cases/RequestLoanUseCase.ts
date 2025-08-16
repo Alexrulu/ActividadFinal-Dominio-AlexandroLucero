@@ -27,6 +27,11 @@ export async function requestLoanUseCase(
     throw new Error("La duracion máxima para el prestamo es de 2 meses");
   }
 
+  const userActiveLoan = await loanRepo.findActiveByUser(userId);
+  if (userActiveLoan) {
+    throw new Error("Ya tienes un préstamo activo, no puedes solicitar otro");
+  }
+
   const existingLoan = await loanRepo.findActiveByUserAndBook(userId, bookId);
 
   const book = await bookRepo.findById(bookId);

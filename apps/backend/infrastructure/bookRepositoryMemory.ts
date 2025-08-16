@@ -1,67 +1,34 @@
 import { Book } from "../../../domain/src/entities/Book";
 import { BookRepository } from "../../../domain/src/repositories/BookRepository";
+import booksData from "../data/books.json";
 
-export class BookRepositoryGoogle implements BookRepository {
+export class BookRepositoryMemory implements BookRepository {
+  private books: Book[] = booksData as Book[];
+
   async findById(id: string): Promise<Book | null> {
-    const res = await fetch(`https://www.googleapis.com/books/v1/volumes/${id}`);
-    const data = await res.json();
-
-    if (!data.id) return null;
-
-    return {
-      id: data.id,
-      title: data.volumeInfo.title,
-      author: data.volumeInfo.authors?.join(", "),
-      totalCopies: 0,
-      borrowedCopies: 0,
-      thumbnail: data.volumeInfo.imageLinks?.thumbnail || "",
-    };
+    const book = this.books.find(b => b.id === id);
+    return book ? { ...book } : null;
   }
 
   async findByTitleAndAuthor(title: string, author: string): Promise<Book | null> {
-    const res = await fetch(
-      `https://www.googleapis.com/books/v1/volumes?q=intitle:${encodeURIComponent(title)}+inauthor:${encodeURIComponent(author)}`
+    const book = this.books.find(
+      b => 
+        b.title.toLowerCase() === title.toLowerCase() &&
+        b.author.toLowerCase() === author.toLowerCase()
     );
-    const data = await res.json();
-    if (!data.items?.length) return null;
-
-    const book = data.items[0];
-    return {
-      id: book.id,
-      title: book.volumeInfo.title,
-      author: book.volumeInfo.authors?.join(", "),
-      totalCopies: 0,
-      borrowedCopies: 0,
-      thumbnail: book.volumeInfo.imageLinks?.thumbnail || "",
-    };
+    return book ? { ...book } : null;
   }
 
-  async findAll(params: { page: number; limit: number }): Promise<Book[]> {
-    const { page, limit } = params;
-    const startIndex = (page - 1) * limit;
-
-    const res = await fetch(
-      `https://www.googleapis.com/books/v1/volumes?q=programming&startIndex=${startIndex}&maxResults=${limit}`
-    );
-    const data = await res.json();
-
-    return (
-      data.items?.map((item: any) => ({
-        id: item.id,
-        title: item.volumeInfo.title,
-        author: item.volumeInfo.authors?.join(", "),
-        totalCopies: 1,
-        borrowedCopies: 0,
-        thumbnail: item.volumeInfo.imageLinks?.thumbnail || "",
-      })) || []
-    );
+  async findAll(): Promise<Book[]> {
+    return [...this.books];
   }
 
-  async save(_book: Book): Promise<void> {
-    throw new Error("Google Books API es de solo lectura en este repositorio.");
-  }
-
-  async delete(_id: string): Promise<void> {
-    throw new Error("Google Books API es de solo lectura en este repositorio.");
+  async save(book: Book): Promise<void> {
+    const index = this.books.findIndex(b => b.id === book.id);
+    if (index === -1) {
+      this.books.push({ ...book });
+    } else {
+      this.books[index] = { ...book };
+    }
   }
 }

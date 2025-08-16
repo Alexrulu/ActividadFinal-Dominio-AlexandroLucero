@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import request from 'supertest'
 import express from 'express'
-import { createBook } from '../../../../domain/src/entities/Book'
 import { BookRepositoryMemory } from '../../infrastructure/bookRepositoryMemory'
 
 describe('listBooksController', () => {
@@ -14,19 +13,9 @@ describe('listBooksController', () => {
 
     bookRepo = new BookRepositoryMemory()
 
-    app.post('/books/manage', async (req, res) => {
-      try {
-        const { title, author, totalCopies } = req.body
-        const id = await bookRepo.save(createBook(crypto.randomUUID(), title, author, totalCopies))
-        res.status(201).json({ message: 'Libro creado correctamente', id, title, author, totalCopies })
-      } catch (error: any) {
-        res.status(400).json({ error: error.message })
-      }
-    })
-
     app.get('/books/list', async (req, res) => {
       try {
-        const books = await bookRepo.findAll({ page: 1, limit: 10 })
+        const books = await bookRepo.findAll()
         if (books.length === 0) {
           return res.status(404).json({ error: 'No se encontraron libros' })
         }
@@ -35,10 +24,6 @@ describe('listBooksController', () => {
         res.status(500).json({ error: error.message })
       }
     })
-
-    await request(app)
-    .post('/books/manage')
-    .send({ title: 'Book 1', author: 'Author 1', totalCopies: 10 })
   })
 
   // Casos exitosos ✅
@@ -47,23 +32,23 @@ describe('listBooksController', () => {
     const res = await request(app).get('/books/list')
     expect(res.statusCode).toBe(200)
     expect(res.body.message).toBe('Libros obtenidos correctamente')
-    expect(res.body.books).toHaveLength(1)
-    expect(res.body.books[0].title).toBe('book 1')
+    expect(res.body.books).toHaveLength(9)
+    expect(res.body.books[0].title).toBe('Programming Languages')
   })
 
   it('Devuelve los titulos de los libros', async () => {
     const res = await request(app).get('/books/list')
-    expect(res.body.books[0].title).toBe('book 1')
+    expect(res.body.books[0].title).toBe('Programming Languages')
   })
 
   it('Devuelve los autores de los libros', async () => {
     const res = await request(app).get('/books/list')
-    expect(res.body.books[0].author).toBe('author 1')
+    expect(res.body.books[0].author).toBe('Kent D. Lee')
   })
 
   it('Devuelve el total de copias de un libro especifico', async () => {
     const res = await request(app).get('/books/list')
-    expect(res.body.books[0].totalCopies).toBe(10)
+    expect(res.body.books[0].totalCopies).toBe(1)
   })
 
   it('Devuelve el total de copias prestadas de un libro especifico', async () => {
@@ -74,9 +59,10 @@ describe('listBooksController', () => {
   // Casos fallidos ❌
   
   it('Lanza error si no se encuentran libros', async () => {
-    bookRepo.clear()
-    const res = await request(app).get('/books/list')
-    expect(res.statusCode).toBe(404)
-    expect(res.body.error).toBe('No se encontraron libros')
-  })
+    (bookRepo as any).books = [];  
+    const res = await request(app).get('/books/list');
+    expect(res.statusCode).toBe(404);
+    expect(res.body.error).toBe('No se encontraron libros');
+  });
+
 })

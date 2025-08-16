@@ -12,7 +12,6 @@ export async function registerUserController(req: Request, res: Response) {
       userRepo, hashService
     )
 
-    // No se devuelve la passwordHash por seguridad
     const { passwordHash, ...userWithoutPassword } = user
 
     return res.status(201).json(userWithoutPassword)

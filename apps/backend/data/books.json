@@ -1,0 +1,74 @@
+[
+  {
+    "id": "OuW5dC2O99AC",
+    "title": "Programming Languages",
+    "author": "Kent D. Lee",
+    "totalCopies": 1,
+    "borrowedCopies": 0,
+    "thumbnail": "http://books.google.com/books/content?id=OuW5dC2O99AC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+  },
+  {
+    "id": "m7E4la3JAVcC",
+    "title": "Programming .NET Components",
+    "author": "Juval Lowy",
+    "totalCopies": 1,
+    "borrowedCopies": 0,
+    "thumbnail": "http://books.google.com/books/content?id=m7E4la3JAVcC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+  },
+  {
+    "id": "eu2JplnQdBkC",
+    "title": "Advances in Genetic Programming",
+    "author": "Kenneth E. Kinnear (Jr.), Peter J. Angeline",
+    "totalCopies": 1,
+    "borrowedCopies": 0,
+    "thumbnail": "http://books.google.com/books/content?id=eu2JplnQdBkC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+  },
+  {
+    "id": "-TgNzYtVZVgC",
+    "title": "Practical Goal Programming",
+    "author": "Dylan Jones, Mehrdad Tamiz",
+    "totalCopies": 1,
+    "borrowedCopies": 0,
+    "thumbnail": "http://books.google.com/books/content?id=-TgNzYtVZVgC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+  },
+  {
+    "id": "0LiRH3ZsMSEC",
+    "title": "Constraint Programming and Large Scale Discrete Optimization",
+    "author": "Eugene C. Freuder, Richard John Wallace",
+    "totalCopies": 1,
+    "borrowedCopies": 0,
+    "thumbnail": "http://books.google.com/books/content?id=0LiRH3ZsMSEC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+  },
+  {
+    "id": "dOz-UK8Fl_UC",
+    "title": "Killer Game Programming in Java",
+    "author": "Andrew Davison",
+    "totalCopies": 1,
+    "borrowedCopies": 0,
+    "thumbnail": "http://books.google.com/books/content?id=dOz-UK8Fl_UC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+  },
+  {
+    "id": "r10U16kgmkwC",
+    "title": "Object-Oriented Programming and Java",
+    "author": "Danny Poo, Derek Kiong, Swarnalatha Ashok",
+    "totalCopies": 1,
+    "borrowedCopies": 0,
+    "thumbnail": "http://books.google.com/books/content?id=r10U16kgmkwC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+  },
+  {
+    "id": "3PBrqNK5fFQC",
+    "title": "A Field Guide to Genetic Programming",
+    "author": "",
+    "totalCopies": 1,
+    "borrowedCopies": 0,
+    "thumbnail": "http://books.google.com/books/content?id=3PBrqNK5fFQC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+  },
+  {
+    "id": "a2Q6U0b36rMC",
+    "title": "Programming Embedded Systems in C and C++",
+    "author": "Michael Barr",
+    "totalCopies": 1,
+    "borrowedCopies": 0,
+    "thumbnail": "http://books.google.com/books/content?id=a2Q6U0b36rMC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+  }
+]

@@ -13,6 +13,9 @@ class InMemoryUserRepository {
   async findById(id: string): Promise<User | null> {
     return this.users.find(u => u.id === id) || null
   }
+  async findAll(): Promise<User[]> {
+    return this.users
+  }
 }
 
 class FakeHashService {

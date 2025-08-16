@@ -37,6 +37,7 @@ describe("requestLoanUseCase", () => {
     };
     loanRepo = {
       findActiveByUserAndBook: vi.fn(),
+      findActiveByUser: vi.fn(),
       create: vi.fn(),
     };
   });
@@ -89,7 +90,7 @@ describe("requestLoanUseCase", () => {
   });
 
   it("deberia lanzar error si no hay copias disponibles", async () => {
-    const book = buildBook({ totalCopies: 2, borrowedCopies: 2 });
+    const book = buildBook({ totalCopies: 1, borrowedCopies: 1 });
     bookRepo.findById.mockResolvedValue(book);
     loanRepo.findActiveByUserAndBook.mockResolvedValue(null);
     await expect(() =>

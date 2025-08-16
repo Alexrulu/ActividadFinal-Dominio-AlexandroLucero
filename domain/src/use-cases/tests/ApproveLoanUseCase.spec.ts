@@ -1,7 +1,6 @@
 import { approveLoanUseCase } from '../ApproveLoanUseCase';
 import { approveLoan } from '../../entities/Loan';
 import { createLoan } from '../../entities/Loan';
-import { createBook } from '../../entities/Book';
 import { hasAvailableCopies } from '../../entities/Book';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
@@ -25,7 +24,13 @@ describe('ApproveLoanUseCase', () => {
   it('deberia aprobar un prestamo modificando el stock del libro', async () => {
     const loanId = 'loan123';
     const bookId = 'book123';
-    const book = createBook(bookId, 'Libro de prueba', 'chincho poroto', 5);
+    const book = {
+      id: bookId, 
+      title:'Libro de prueba', 
+      author:'chincho poroto', 
+      totalCopies:1,
+      borrowedCopies: 0
+    };
     const loan = createLoan({ 
       id: loanId, 
       userId: 'user123',
@@ -41,8 +46,8 @@ describe('ApproveLoanUseCase', () => {
     expect(loan.approved).toBe(true);
     const savedBook = bookRepository.save.mock.calls[0][0];
     expect(savedBook.borrowedCopies).toBe(1);
-    expect(savedBook.totalCopies - savedBook.borrowedCopies).toBe(4);
-    expect(hasAvailableCopies(savedBook)).toBe(true);
+    expect(savedBook.totalCopies - savedBook.borrowedCopies).toBe(0);
+    expect(hasAvailableCopies(savedBook)).toBe(false);
   });
 
   // Casos fallidos ❌
@@ -50,7 +55,12 @@ describe('ApproveLoanUseCase', () => {
   it('deberia lanzar un error si el prestamo ya está aprobado', async () => {
     const loanId = 'loan123';
     const bookId = 'book123';
-    const book = createBook(bookId, 'Libro de prueba', 'chincho poroto', 5);
+    const book = { 
+      id: bookId, 
+      title: 'Libro de prueba', 
+      author: 'chincho poroto', 
+      totalCopies: 1
+    };
     const loan = createLoan({
       id: loanId, 
       userId: 'user123', 
@@ -83,7 +93,11 @@ describe('ApproveLoanUseCase', () => {
   it('deberia lanzar un error si no hay copias disponibles para aprobar el prestamo', async () => {
     const loanId = 'loan123';
     const bookId = 'book123';
-    const book = createBook(bookId, 'Libro de prueba', 'chincho poroto', 0);
+    const book = { id: bookId, 
+      title: 'Libro de prueba', 
+      author: 'chincho poroto', 
+      totalCopies: 0
+    };
     const loan = createLoan({
       id: loanId, 
       userId: 'user123', 
