@@ -10,6 +10,8 @@ Aplicación desarrollada con Clean Architecture + TDD
 - Supertest
 - Bcrypt
 - JWT
+- Storybook
+- Tailwind
 
 ## 📁 Estructura del proyecto
 ```
@@ -18,11 +20,20 @@ Aplicación desarrollada con Clean Architecture + TDD
 │   ├── backend/
 │   │   ├── controllers/      # Contiene la lógica para manejar las solicitudes HTTP y las respuestas.
 │   │   │   └── tests/        # Pruebas de los controladores, validando la interacción con los casos de uso.
-│   │   ├── database/         # ⏳ Proximamente... (actualmente almacenamiento en memoria).
+│   │   ├── data/             # Almacenamiento en memoria.
 │   │   ├── infrastructure/   # Implementaciones concretas de servicios y repositorios.
 │   │   ├── routes/           # Define las rutas de la API.
 │   │   └── index.ts          # Punto de entrada principal de la aplicación.
-│   └── frontend/             # ⏳ Proximamente...
+│   └── frontend/
+│       ├── public/           # Archivos estáticos accesibles públicamente.
+│       └── src/
+│           ├── components/   # Componentes reutilizables de UI.
+│           ├── hooks/        # Custom hooks para encapsular lógica reutilizable.
+│           ├── layout/       # Componentes de maquetación de la aplicación.
+│           ├── pages/        # Vistas completas de la aplicación.
+│           ├── styles/       # Estilos globales o específicos.
+│           ├── App.tsx       # Enrutamiento
+│           └── main.tsx
 └── domain_src/               # Contiene la lógica de negocio central de la aplicación.
     ├── entities/             # Clases que representan los objetos de negocio (Book, Loan, User).
     ├── repositories/         # Interfaces de los repositorios para la persistencia de datos.
@@ -47,3 +58,13 @@ npm install
 
 # Inicia el servidor de desarrollo
 npm run dev
+
+# Abre otra terminal, navega al directorio del frontend
+cd apps/frontend
+
+# Instala las dependencias (React, Tailwind, Storybook, etc.)
+npm install
+
+# Inicia el frontend
+npm run dev
+
