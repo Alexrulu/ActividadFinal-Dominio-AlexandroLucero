@@ -1,5 +1,5 @@
-import { User } from "../../../domain/src/entities/User";
-import { UserRepository } from "../../../domain/src/repositories/UserRepository";
+import { User } from "@domain/entities/User";
+import { UserRepository } from "@domain/repositories/UserRepository";
 import usersData from "../data/users.json";
 
 export class UserRepositoryMemory implements UserRepository {

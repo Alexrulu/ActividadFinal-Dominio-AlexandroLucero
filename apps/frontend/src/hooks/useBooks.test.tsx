@@ -1,7 +1,7 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { useBooks } from './useBooks';
-import type { Book } from '../../../../domain/src/entities/Book';
+import type { Book } from '@domain/entities/Book';
 import { BookService } from '../api/bookService';
 
 describe('useBooks hook', () => {

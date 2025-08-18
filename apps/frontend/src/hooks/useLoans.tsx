@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { Loan } from '../../../../domain/src/entities/Loan';
+import type { Loan } from '@domain/entities/Loan';
 
 export function useLoans(userId: string | null) {
   const [loan, setLoan] = useState<Loan | null>(null);

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { Loan } from '../../../../domain/src/entities/Loan';
+import type { Loan } from '@domain/entities/Loan';
 
 interface LoanResponse extends Loan {
   message: string;

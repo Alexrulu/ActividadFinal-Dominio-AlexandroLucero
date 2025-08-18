@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { authenticateUserUseCase } from '../../../domain/src/use-cases/AuthenticateUserUseCase';
+import { authenticateUserUseCase } from '@domain/use-cases/AuthenticateUserUseCase';
 import { userRepo, hashService, tokenGenerator } from './repositories';
 
 export async function authenticateUserController(req: Request, res: Response) {

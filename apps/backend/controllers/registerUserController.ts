@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { registerUserUseCase } from "../../../domain/src/use-cases/RegisterUserUseCase"
+import { registerUserUseCase } from "@domain/use-cases/RegisterUserUseCase"
 import { userRepo } from "./repositories";
 import { hashService } from "./repositories";
 

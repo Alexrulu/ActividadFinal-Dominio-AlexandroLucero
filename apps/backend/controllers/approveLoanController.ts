@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { approveLoanUseCase } from '../../../domain/src/use-cases/ApproveLoanUseCase'
+import { approveLoanUseCase } from '@domain/use-cases/ApproveLoanUseCase'
 import { loanRepo, bookRepo } from './repositories';
 
 export async function approveLoanController(req: Request, res: Response) {

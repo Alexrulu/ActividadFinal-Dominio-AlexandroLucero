@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { TokenGenerator } from '../../../domain/src/services/TokenGenerator';
+import { TokenGenerator } from '@domain/services/TokenGenerator';
 
 const SECRET_KEY = 'default_secret';
 

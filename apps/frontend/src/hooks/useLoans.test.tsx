@@ -1,7 +1,7 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { useLoans } from './useLoans';
-import type { Loan } from '../../../../domain/src/entities/Loan';
+import type { Loan } from '@domain/entities/Loan';
 
 describe('useLoans hook', () => {
   const mockLoan: Loan = {

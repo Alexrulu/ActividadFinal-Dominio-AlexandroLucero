@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { deleteLoanUseCase } from '../../../domain/src/use-cases/DeleteLoanUseCase';
+import { deleteLoanUseCase } from '@domain/use-cases/DeleteLoanUseCase';
 import { loanRepo } from './repositories';
 
 export async function deleteLoanController(req: Request, res: Response) {

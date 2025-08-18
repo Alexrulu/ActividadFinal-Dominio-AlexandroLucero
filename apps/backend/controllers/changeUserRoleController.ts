@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { changeUserRoleUseCase } from "../../../domain/src/use-cases/ChangeUserRoleUseCase";
+import { changeUserRoleUseCase } from "@domain/use-cases/ChangeUserRoleUseCase";
 import { userRepo } from "./repositories";
 
 export async function changeUserRoleController(req: Request, res: Response) {
