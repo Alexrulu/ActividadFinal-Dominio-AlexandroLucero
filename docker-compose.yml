@@ -1,6 +1,15 @@
 version: "3.9"
 
 services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: library
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
   backend:
     build:
       context: .           
@@ -9,6 +18,8 @@ services:
       - "3000:3000"
     volumes:
       - ./apps/backend:/app/apps/backend
+    depends_on:
+      - db
 
   frontend:
     build:
@@ -20,3 +31,6 @@ services:
       VITE_API_URL: http://backend:3000
     depends_on:
       - backend
+
+volumes:
+  db-data:
