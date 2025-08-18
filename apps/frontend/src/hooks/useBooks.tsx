@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { Book } from '../../../../domain/src/entities/Book';
+import type { Book } from '@domain/entities/Book';
 import { BookService } from '../api/bookService';
 
 export function useBooks() {

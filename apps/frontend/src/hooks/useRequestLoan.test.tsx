@@ -1,7 +1,7 @@
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { useRequestLoan } from './useRequestLoan';
-import type { Loan } from '../../../../domain/src/entities/Loan';
+import type { Loan } from '@domain/entities/Loan';
 
 // ---- Mock useNavigate a nivel superior ----
 const navigateMock = vi.fn();

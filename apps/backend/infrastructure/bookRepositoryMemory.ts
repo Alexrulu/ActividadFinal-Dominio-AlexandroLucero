@@ -1,5 +1,5 @@
-import { Book } from "../../../domain/src/entities/Book";
-import { BookRepository } from "../../../domain/src/repositories/BookRepository";
+import { Book } from "@domain/entities/Book";
+import { BookRepository } from "@domain/repositories/BookRepository";
 import booksData from "../data/books.json";
 
 export class BookRepositoryMemory implements BookRepository {

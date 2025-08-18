@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { requestLoanUseCase } from "../../../domain/src/use-cases/RequestLoanUseCase";
+import { requestLoanUseCase } from "@domain/use-cases/RequestLoanUseCase";
 import { bookRepo, loanRepo } from "./repositories";
 import jwt from 'jsonwebtoken';
 

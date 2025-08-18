@@ -1,5 +1,5 @@
-import { Loan } from '../../../domain/src/entities/Loan'
-import { LoanRepository } from '../../../domain/src/repositories/LoanRepository'
+import { Loan } from '@domain/entities/Loan'
+import { LoanRepository } from '@domain/repositories/LoanRepository'
 import loansData from '../data/loans.json'
 
 const db: Loan[] = loansData as Loan[]

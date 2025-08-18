@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { listLoansUseCase } from "../../../domain/src/use-cases/ListLoansUseCase";
+import { listLoansUseCase } from "@domain/use-cases/ListLoansUseCase";
 import { loanRepo } from "./repositories";
 
 export async function listLoansController(req: Request, res: Response) {

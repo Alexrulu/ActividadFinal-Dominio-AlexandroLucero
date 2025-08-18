@@ -67,4 +67,13 @@ npm install
 
 # Inicia el frontend
 npm run dev
+```
 
+## 🐋 Docker 
+```bash
+# Iniciar docker (desde raíz)
+docker compose up --build
+
+# Detener docker
+docker compose down
+```

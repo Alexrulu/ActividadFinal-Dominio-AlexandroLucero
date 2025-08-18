@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { listUsersUseCase } from '../../../domain/src/use-cases/ListUsersUseCase';
+import { listUsersUseCase } from '@domain/use-cases/ListUsersUseCase';
 import { userRepo } from './repositories';
 import jwt from 'jsonwebtoken';
 

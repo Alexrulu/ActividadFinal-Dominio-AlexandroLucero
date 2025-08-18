@@ -1,4 +1,4 @@
-import { HashService } from '../../../domain/src/services/HashService';
+import { HashService } from '@domain/services/HashService';
 import bcrypt from 'bcrypt';
 
 export class BcryptHashService implements HashService {

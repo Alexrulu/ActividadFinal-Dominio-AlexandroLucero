@@ -1,4 +1,4 @@
-import type { Book } from '../../../../domain/src/entities/Book';
+import type { Book } from '@domain/entities/Book';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
